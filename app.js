@@ -31,18 +31,14 @@ app.use(
     graphiql: true
   })
 );
-
+const mdb_conn_str = `mongodb+srv://${process.env.MONGO_USER}:${
+  process.env.MONGO_PASSWORD
+}@cluster-yanggc-v65dk.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`;
+console.info("conn str", mdb_conn_str);
 mongoose
-  .connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${
-      process.env.MONGO_PASSWORD
-    }@cluster-yanggc-v65dk.mongodb.net/${
-      process.env.MONGO_DB
-    }?retryWrites=true`,
-    {
-      useNewUrlParser: true
-    }
-  )
+  .connect(mdb_conn_str, {
+    useNewUrlParser: true
+  })
   .then(() => {
     console.info("db connected!");
     app.listen(8000);

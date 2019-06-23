@@ -1,0 +1,36 @@
+query ListQuery {
+  ddArticles {
+    _id
+    title
+    description
+    link
+    date
+    thumbnail
+  }
+}
+mutation RemoveDdArticle($artId: String!) {
+  removeDdArticle(artId: $artId) {
+    title
+    thumbnail
+  }
+}
+mutation InsertDdArticle(
+  $title: String!
+  $description: String!
+  $link: String!
+  $date: String!
+  $thumbnail: String!
+) {
+  createDdArticle(
+    dDArticleInput: {
+      title: $title
+      description: $description
+      link: $link
+      date: $date
+      thumbnail: $thumbnail
+    }
+  ) {
+    title
+    thumbnail
+  }
+}
