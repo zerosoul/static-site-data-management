@@ -1,30 +1,42 @@
 import React, { useEffect } from "react";
 import { Query, Mutation } from "react-apollo";
 import { Table, Button, message } from "antd";
+import moment from "moment";
+import styled from "styled-components";
 import { ListQuery, RemoveDdArticle } from "./actions.gql";
 
+const StyledLink = styled.a`
+  max-width: 12rem;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
 let refreshTable = () => {};
 export default function List({ refresh = false, handleModalVisible }) {
   const columns = [
     {
       title: "标题",
       dataIndex: "title",
-      key: "title"
+      key: "title",
+      width: 240
     },
     {
       title: "描述",
       dataIndex: "description",
-      key: "description"
+      key: "description",
+      width: 300
     },
     {
       title: "外链",
       dataIndex: "link",
       key: "link",
+      width: 300,
       render: l => {
         return (
-          <a target="_blank" href={l}>
+          <StyledLink target="_blank" href={l}>
             {l}
-          </a>
+          </StyledLink>
         );
       }
     },
@@ -33,16 +45,22 @@ export default function List({ refresh = false, handleModalVisible }) {
       dataIndex: "thumbnail",
       key: "thumbnail",
       render: img => (
-        <>{img ? <img src={img} alt="缩略图" /> : <span>暂无</span>}</>
+        <>
+          {img ? (
+            <img style={{ maxWidth: "8rem" }} src={img} alt="缩略图" />
+          ) : (
+            <span>暂无</span>
+          )}
+        </>
       )
     },
     {
-      title: "创建时间",
+      title: "发表时间",
       dataIndex: "date",
       key: "date",
       render: d => (
         <>
-          <span>{new Date(+d).toLocaleDateString()}</span>
+          <span>{moment(new Date(+d)).format("YYYY/MM/DD HH:mm:ss")}</span>
         </>
       )
     },
@@ -50,13 +68,16 @@ export default function List({ refresh = false, handleModalVisible }) {
       title: "操作",
       dataIndex: "options",
       key: "options",
+      width: 200,
       render: (d, item) => {
         const { _id } = item;
         return (
           <Button.Group size="small">
             <Button
               onClick={() => {
-                handleModalVisible(true);
+                console.log("curr id", _id);
+
+                handleModalVisible(true, _id);
               }}
             >
               编辑

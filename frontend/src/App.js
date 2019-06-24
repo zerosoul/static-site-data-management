@@ -20,50 +20,27 @@ class App extends Component {
     };
   }
 
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  };
   render() {
     const { token, userId } = this.state;
     return (
       <Layout>
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-          <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={["1"]}>
-            <Menu.Item key="1">
-              <Icon type="user" />
-              <a href="/ddarticles">点点未来官网文章</a>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout>
-          <Header style={{ background: "#fff", padding: 0 }}>
-            <Icon
-              className="trigger"
-              type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
-              onClick={this.toggle}
-            />
-          </Header>
-          <Content
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              background: "#fff",
-              minHeight: 280
-            }}
-          >
-            <BrowserRouter>
-              <Switch>
-                {!token && <Route path="/auth" component={AuthPage} />}
-                <Route path="/ddarticles" component={DDArticles} />
-                {!token && <Redirect to="/auth" exact />}
-              </Switch>
-            </BrowserRouter>
-          </Content>
-          <Footer>footer</Footer>
-        </Layout>
+        <Content
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            background: "#fff",
+            minHeight: 280
+          }}
+        >
+          <BrowserRouter>
+            <Switch>
+              {!token && <Route path="/auth" component={AuthPage} />}
+              <Route path="/ddarticles" component={DDArticles} />
+              {!token && <Redirect to="/auth" exact />}
+            </Switch>
+          </BrowserRouter>
+        </Content>
+        <Footer>footer</Footer>
       </Layout>
     );
   }

@@ -12,11 +12,12 @@ type DDArticle{
 }
 
 input DDArticleInput {
+  id: String
   title: String!
-   description: String!
-   link: String!
-   date: String!
-    thumbnail:String!
+  description: String!
+  link: String!
+  date: String!
+  thumbnail:String!
 }
 
 type Booking {
@@ -65,6 +66,7 @@ type RootQuery {
     events: [Event!]!
     bookings: [Booking!]!
     ddArticles: [DDArticle!]!
+    getDdArticle(artId: String!): DDArticle
 }
   
 type RootMutation {
@@ -74,6 +76,7 @@ type RootMutation {
     bookEvent(eventId: ID!): Booking!
     cancelBooking(bookingId: ID!): Event!
     createDdArticle(dDArticleInput: DDArticleInput): DDArticle
+    updateDdArticle(dDArticleInput: DDArticleInput): DDArticle
     removeDdArticle(artId: String!): DDArticle
 }
 

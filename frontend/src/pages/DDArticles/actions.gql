@@ -8,8 +8,39 @@ query ListQuery {
     thumbnail
   }
 }
+query GetDdArticle($artId: String!) {
+  getDdArticle(artId: $artId) {
+    title
+    thumbnail
+    description
+    date
+    link
+  }
+}
 mutation RemoveDdArticle($artId: String!) {
   removeDdArticle(artId: $artId) {
+    title
+    thumbnail
+  }
+}
+mutation UpdateDdArticle(
+  $id: String!
+  $title: String!
+  $description: String!
+  $link: String!
+  $date: String!
+  $thumbnail: String!
+) {
+  updateDdArticle(
+    dDArticleInput: {
+      id: $id
+      title: $title
+      description: $description
+      link: $link
+      date: $date
+      thumbnail: $thumbnail
+    }
+  ) {
     title
     thumbnail
   }

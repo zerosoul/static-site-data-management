@@ -16,20 +16,40 @@ module.exports = {
       throw err;
     }
   },
+  getDdArticle: async (args, req) => {
+    const { artId } = args;
+    console.log("art input", args);
+
+    try {
+      const art = await DDArticle.findById(artId);
+      return art;
+    } catch (err) {
+      throw err;
+    }
+  },
   removeDdArticle: async (args, req) => {
     const { artId } = args;
     console.log("art input", args);
 
     try {
-      DDArticle.findByIdAndDelete(artId, (err, art) => {
-        if (err) {
-          throw err;
-        }
-        console.log("wtf", err, art);
-
-        return art;
-      });
+      const art = await DDArticle.findByIdAndDelete(artId);
+      return art;
     } catch (err) {
+      throw err;
+    }
+  },
+  updateDdArticle: async (args, req) => {
+    const { id, ...rest } = args.dDArticleInput;
+    console.log("art input", args);
+    try {
+      const result = await DDArticle.findByIdAndUpdate(id, rest);
+      console.log("art update result", result);
+
+      // createArticle = transformEvent(result);
+      // return createArticle;
+      return result;
+    } catch (err) {
+      console.log(err);
       throw err;
     }
   },

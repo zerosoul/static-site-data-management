@@ -5,17 +5,21 @@ import ArtForm from "./formModal";
 export default function DDArticles() {
   const [modalVisible, setModalVisible] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const handleModalVisible = (visible = true) => {
+  const [currId, setCurrId] = useState(null);
+  const handleModalVisible = (visible = true, currId = null) => {
     setModalVisible(visible);
     if (modalVisible && visible === false) {
       setRefresh(true);
     } else {
       setRefresh(false);
     }
+    setCurrId(currId);
   };
   return (
     <>
-      {modalVisible && <ArtForm handleModalVisible={handleModalVisible} />}
+      {modalVisible && (
+        <ArtForm id={currId} handleModalVisible={handleModalVisible} />
+      )}
       <Button
         type="primary"
         onClick={() => {
