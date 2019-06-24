@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Query, Mutation } from "react-apollo";
-import { Table, Button, message } from "antd";
+import { Table, Button, message, Popconfirm } from "antd";
 import moment from "moment";
 import styled from "styled-components";
 import { ListQuery, RemoveDdArticle } from "./actions.gql";
@@ -12,8 +12,7 @@ const StyledLink = styled.a`
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
-let refreshTable = () => {};
-export default function List({ refresh = false, handleModalVisible }) {
+export default function List({ handleModalVisible }) {
   const columns = [
     {
       title: "标题",
@@ -82,7 +81,12 @@ export default function List({ refresh = false, handleModalVisible }) {
             >
               编辑
             </Button>
-            <Mutation mutation={RemoveDdArticle}>
+            <Mutation
+              mutation={RemoveDdArticle}
+              refetchQueries={result => {
+                return [{ query: ListQuery }];
+              }}
+            >
               {(removeDdArticle, { data, loading, err }) => {
                 if (err) {
                   message.error("删除出错了");
@@ -91,18 +95,20 @@ export default function List({ refresh = false, handleModalVisible }) {
                   message.success("删除成功");
                 }
                 return (
-                  <Button
-                    loading={loading}
-                    type="danger"
-                    onClick={async () => {
+                  <Popconfirm
+                    okText="确定"
+                    cancelText="取消"
+                    onConfirm={async () => {
                       const resp = await removeDdArticle({
                         variables: { artId: _id }
                       });
-                      refreshTable();
                     }}
+                    title="确定删除？"
                   >
-                    删除
-                  </Button>
+                    <Button loading={loading} type="danger">
+                      删除
+                    </Button>
+                  </Popconfirm>
                 );
               }}
             </Mutation>
@@ -111,27 +117,28 @@ export default function List({ refresh = false, handleModalVisible }) {
       }
     }
   ];
-  useEffect(() => {
-    if (refresh) {
-      refreshTable();
-    }
-  }, [refresh]);
   handleModalVisible.bind(columns);
   return (
-    <Query fetchPolicy="network-only" query={ListQuery}>
-      {({ loading, error, data, refetch }) => {
+    <Query
+      query={ListQuery}
+      fetchPolicy="network-only"
+      notifyOnNetworkStatusChange={true}
+      partialRefetch
+    >
+      {({ loading, error, data = {}, networkStatus }) => {
         if (error) return `Error! ${error.message}`;
-        refreshTable = refetch;
+        console.log("table loading", loading, networkStatus);
+
         return (
           <Table
             rowKey={"_id"}
             columns={columns}
             dataSource={data.ddArticles}
-            loading={loading}
+            loading={loading || networkStatus == 4}
             pagination={{
               size: "small",
-              pageSize: 5,
-              total: data && data.ddArticles && data.ddArticles.length
+              pageSize: 10,
+              total: data.ddArticles && data.ddArticles.length
             }}
           />
         );

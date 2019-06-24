@@ -4,15 +4,9 @@ import List from "./listTable";
 import ArtForm from "./formModal";
 export default function DDArticles() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [refresh, setRefresh] = useState(false);
   const [currId, setCurrId] = useState(null);
   const handleModalVisible = (visible = true, currId = null) => {
     setModalVisible(visible);
-    if (modalVisible && visible === false) {
-      setRefresh(true);
-    } else {
-      setRefresh(false);
-    }
     setCurrId(currId);
   };
   return (
@@ -29,7 +23,7 @@ export default function DDArticles() {
         新建
       </Button>
       <Divider />
-      <List refresh={refresh} handleModalVisible={handleModalVisible} />
+      <List handleModalVisible={handleModalVisible} />
     </>
   );
 }
