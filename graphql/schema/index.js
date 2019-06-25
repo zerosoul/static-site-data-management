@@ -11,6 +11,26 @@ type DDArticle{
    thumbnail:String
 }
 
+type DDPosition{
+   _id: ID!
+   title: String!
+   cate: String!
+   updateTime: String!
+   location: String!
+   depart:String!
+   link: String
+}
+
+input DDPositionInput {
+  id: String
+  title: String!
+  cate: String!
+  updateTime: String!
+  location: String!
+  depart:String!
+  link: String
+}
+
 input DDArticleInput {
   id: String
   title: String!
@@ -67,6 +87,8 @@ type RootQuery {
     bookings: [Booking!]!
     ddArticles: [DDArticle!]!
     getDdArticle(artId: String!): DDArticle
+    ddPositions: [DDPosition!]!
+    getDdPosition(posId: String!): DDPosition
 }
   
 type RootMutation {
@@ -78,6 +100,9 @@ type RootMutation {
     createDdArticle(dDArticleInput: DDArticleInput): DDArticle
     updateDdArticle(dDArticleInput: DDArticleInput): DDArticle
     removeDdArticle(artId: String!): DDArticle
+    createDdPosition(dDPositionInput: DDPositionInput): DDPosition
+    updateDdPosition(dDPositionInput: DDPositionInput): DDPosition
+    removeDdPosition(posId: String!): DDPosition
 }
 
 schema {

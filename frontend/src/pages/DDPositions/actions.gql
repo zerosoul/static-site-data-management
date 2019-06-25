@@ -1,0 +1,72 @@
+query ListQuery {
+  ddPositions {
+    _id
+    title
+    cate
+    depart
+    link
+    location
+    updateTime
+  }
+}
+query GetDdPosition($posId: String!) {
+  getDdPosition(posId: $posId) {
+    title
+    cate
+    depart
+    link
+    location
+    updateTime
+  }
+}
+mutation RemoveDdPosition($posId: String!) {
+  removeDdPosition(posId: $posId) {
+    title
+  }
+}
+mutation UpdateDdPosition(
+  $id: String!
+  $title: String!
+  $cate: String!
+  $link: String!
+  $updateTime: String!
+  $depart: String!
+  $location: String!
+) {
+  updateDdPosition(
+    dDPositionInput: {
+      id: $id
+      title: $title
+      cate: $cate
+      link: $link
+      updateTime: $updateTime
+      depart: $depart
+      location: $location
+    }
+  ) {
+    title
+    depart
+  }
+}
+mutation InsertDdPosition(
+  $title: String!
+  $cate: String!
+  $link: String!
+  $updateTime: String!
+  $depart: String!
+  $location: String!
+) {
+  createDdPosition(
+    dDPositionInput: {
+      title: $title
+      cate: $cate
+      link: $link
+      updateTime: $updateTime
+      depart: $depart
+      location: $location
+    }
+  ) {
+    title
+    depart
+  }
+}

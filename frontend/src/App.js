@@ -8,6 +8,7 @@ const { Header, Sider, Content, Footer } = Layout;
 import AuthPage from "./pages/Auth";
 import DDArticles from "./pages/DDArticles";
 import { authListener, isLogin } from "./auth";
+import DDPositions from "./pages/DDPositions";
 const Wrapper = styled.main`
   margin: 4rem 2.5rem;
 `;
@@ -36,6 +37,7 @@ class App extends Component {
             <Switch>
               {!token && <Route path="/auth" component={AuthPage} />}
               <Route path="/ddarticles" component={DDArticles} />
+              <Route path="/ddpositions" component={DDPositions} />
               {!token && <Redirect to="/auth" exact />}
             </Switch>
           </BrowserRouter>
