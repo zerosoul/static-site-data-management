@@ -21,10 +21,22 @@ export default function List({ handleModalVisible }) {
       width: 240
     },
     {
-      title: "描述",
-      dataIndex: "description",
-      key: "description",
-      width: 300
+      title: "职位类别",
+      dataIndex: "cate",
+      key: "cate",
+      width: 200
+    },
+    {
+      title: "工作地点",
+      dataIndex: "location",
+      key: "location",
+      width: 130
+    },
+    {
+      title: "部门",
+      dataIndex: "depart",
+      key: "depart",
+      width: 140
     },
     {
       title: "外链",
