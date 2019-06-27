@@ -13,7 +13,9 @@ import {
   Row,
   Col,
   Divider,
-  Spin
+  Spin,
+  Select,
+  Switch
 } from "antd";
 import {
   InsertDdArticle,
@@ -31,6 +33,7 @@ const ColLayout = {
 };
 
 const { Item } = Form;
+const { Option } = Select;
 function getBase64(img, callback) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -59,10 +62,19 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
         const tmp = new Date().toLocaleDateString();
         console.info("form values", values);
         // return;
-        let { title, description, link, date = tmp, thumbnail } = values;
+        let {
+          title,
+          description,
+          link,
+          date = tmp,
+          thumbnail,
+          type,
+          isTop
+        } = values;
         thumbnail = imgUrl || thumbnail || "";
+        type = Number(type);
         date = moment(date).format("YYYY-MM-DD HH:mm:ss");
-        const data = { title, description, link, date, thumbnail };
+        const data = { title, description, link, date, thumbnail, type, isTop };
         if (artId) {
           console.log("form submit id", artId);
           data.id = artId;
@@ -97,6 +109,7 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
     <Mutation
       mutation={artId ? UpdateDdArticle : InsertDdArticle}
       refetchQueries={result => [{ query: ListQuery }]}
+      fetchPolicy="no-cache"
     >
       {(editArticle, { loading, data, error }) => {
         if (error) return "error";
@@ -173,6 +186,28 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
               </Col>
             </Row>
             <Row>
+              <Col span={6}>
+                <Item label="置顶" {...ColLayout}>
+                  {getFieldDecorator("isTop", {
+                    rules: [],
+                    valuePropName: "checked",
+                    initialValue: !!article.isTop
+                  })(<Switch />)}
+                </Item>
+              </Col>
+              <Col span={6}>
+                <Item label="类型" {...ColLayout}>
+                  {getFieldDecorator("type", {
+                    rules: [],
+                    initialValue: String(article.type || 1)
+                  })(
+                    <Select>
+                      <Option value="1">新闻稿</Option>
+                      <Option value="2">点滴人物</Option>
+                    </Select>
+                  )}
+                </Item>
+              </Col>
               <Col span={12}>
                 <Item label="上传缩略图" {...ColLayout}>
                   {getFieldDecorator("thumbnail", {
@@ -220,7 +255,12 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
 };
 const HOCForm = Form.create({ name: "ddarticle" })(EditForm);
 const FormModal = ({ handleModalVisible, id }) => (
-  <Query query={GetDdArticle} variables={{ artId: id }} skip={!id}>
+  <Query
+    query={GetDdArticle}
+    fetchPolicy="network-only"
+    variables={{ artId: id }}
+    skip={!id}
+  >
     {({ data = {}, loading, error }) => {
       if (error) return "error";
       console.log("wtf", loading);

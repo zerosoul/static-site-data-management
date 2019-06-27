@@ -9,6 +9,8 @@ type DDArticle{
    link: String!
    date: String!
    thumbnail:String
+   isTop:Boolean
+   type:Int
 }
 
 type DDPosition{
@@ -33,11 +35,13 @@ input DDPositionInput {
 
 input DDArticleInput {
   id: String
-  title: String!
-  description: String!
-  link: String!
-  date: String!
-  thumbnail:String!
+  title: String
+  description: String
+  link: String
+  date: String
+  thumbnail:String
+  isTop:Boolean
+  type:Int
 }
 
 type Booking {

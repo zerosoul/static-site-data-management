@@ -3,7 +3,7 @@ import { Query, Mutation } from "react-apollo";
 import { Table, Button, message, Popconfirm } from "antd";
 import moment from "moment";
 import styled from "styled-components";
-import { ListQuery, RemoveDdArticle } from "./actions.gql";
+import { ListQuery, RemoveDdArticle, UpdateDdArticle } from "./actions.gql";
 
 const StyledLink = styled.a`
   max-width: 12rem;
@@ -25,6 +25,15 @@ export default function List({ handleModalVisible }) {
       dataIndex: "description",
       key: "description",
       width: 300
+    },
+    {
+      title: "文章类型",
+      dataIndex: "type",
+      key: "type",
+      width: 120,
+      render: type => {
+        return type == 1 ? "新闻稿" : "点滴人物";
+      }
     },
     {
       title: "外链",
@@ -67,9 +76,9 @@ export default function List({ handleModalVisible }) {
       title: "操作",
       dataIndex: "options",
       key: "options",
-      width: 200,
+      width: 240,
       render: (d, item) => {
-        const { _id } = item;
+        const { _id, isTop } = item;
         return (
           <Button.Group size="small">
             <Button
@@ -108,6 +117,35 @@ export default function List({ handleModalVisible }) {
                     <Button loading={loading} type="danger">
                       删除
                     </Button>
+                  </Popconfirm>
+                );
+              }}
+            </Mutation>
+            <Mutation
+              mutation={UpdateDdArticle}
+              refetchQueries={result => {
+                return [{ query: ListQuery }];
+              }}
+            >
+              {(updateDdArticle, { data, loading, err }) => {
+                if (err) {
+                  message.error("操作出错了");
+                }
+                if (data && data.title) {
+                  message.success("操作成功");
+                }
+                return (
+                  <Popconfirm
+                    okText="确定"
+                    cancelText="取消"
+                    onConfirm={async () => {
+                      const resp = await updateDdArticle({
+                        variables: { id: _id, isTop: !isTop }
+                      });
+                    }}
+                    title={isTop ? "确定撤顶？" : "确定置顶？"}
+                  >
+                    <Button loading={loading}>{isTop ? "撤顶" : "置顶"}</Button>
                   </Popconfirm>
                 );
               }}

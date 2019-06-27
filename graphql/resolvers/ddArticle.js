@@ -54,7 +54,15 @@ module.exports = {
     }
   },
   createDdArticle: async (args, req) => {
-    const { title, description, date, link, thumbnail } = args.dDArticleInput;
+    const {
+      title,
+      description,
+      date,
+      link,
+      thumbnail,
+      type,
+      isTop
+    } = args.dDArticleInput;
     console.log("art input", args);
 
     const art = new DDArticle({
@@ -62,9 +70,10 @@ module.exports = {
       description,
       date: new Date(date),
       link,
-      thumbnail
+      thumbnail,
+      type,
+      isTop
     });
-    let createArticle;
     try {
       const result = await art.save();
       console.log("art create result", result);

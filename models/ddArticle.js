@@ -22,6 +22,15 @@ const eventSchema = new Schema({
   date: {
     type: Date,
     required: true
+  },
+  // 1 新闻 2 点滴人物
+  type: {
+    type: Number,
+    default: 1
+  },
+  isTop: {
+    type: Boolean,
+    default: false
   }
 });
 
