@@ -3,6 +3,7 @@ query ListQuery {
     _id
     title
     description
+    content
     link
     date
     thumbnail
@@ -15,6 +16,7 @@ query GetDdArticle($artId: String!) {
     description
     date
     link
+    content
   }
 }
 mutation RemoveDdArticle($artId: String!) {
@@ -27,6 +29,7 @@ mutation UpdateDdArticle(
   $id: String!
   $title: String!
   $description: String!
+  $content: String!
   $link: String!
   $date: String!
   $thumbnail: String!
@@ -36,6 +39,7 @@ mutation UpdateDdArticle(
       id: $id
       title: $title
       description: $description
+      content: $content
       link: $link
       date: $date
       thumbnail: $thumbnail
@@ -48,6 +52,7 @@ mutation UpdateDdArticle(
 mutation InsertDdArticle(
   $title: String!
   $description: String!
+  $content: String!
   $link: String!
   $date: String!
   $thumbnail: String!
@@ -55,7 +60,7 @@ mutation InsertDdArticle(
   createDdArticle(
     dDArticleInput: {
       title: $title
-      description: $description
+      content: $content
       link: $link
       date: $date
       thumbnail: $thumbnail

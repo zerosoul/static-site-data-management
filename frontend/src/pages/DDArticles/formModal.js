@@ -59,7 +59,14 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
         const tmp = new Date().toLocaleDateString();
         console.info("form values", values);
         // return;
-        let { title, description, link, date = tmp, thumbnail } = values;
+        let {
+          title,
+          description,
+          link,
+          date = tmp,
+          thumbnail,
+          content
+        } = values;
         thumbnail = imgUrl || thumbnail || "";
         date = moment(date).format("YYYY-MM-DD HH:mm:ss");
         const data = { title, description, link, date, thumbnail };
@@ -228,7 +235,7 @@ const FormModal = ({ handleModalVisible, id }) => (
       const { getDdArticle = {} } = data;
       return (
         <Modal
-          width={800}
+          width={"90vw"}
           title={id ? "更新" : "创建"}
           visible={true}
           footer={false}

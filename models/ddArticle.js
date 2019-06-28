@@ -11,6 +11,11 @@ const eventSchema = new Schema({
     type: String,
     required: true
   },
+  content: {
+    type: String,
+    required: true,
+    default: ""
+  },
   thumbnail: {
     type: String,
     required: false
@@ -21,7 +26,8 @@ const eventSchema = new Schema({
   },
   date: {
     type: Date,
-    required: true
+    required: true,
+    default: Date.now
   }
 });
 

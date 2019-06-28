@@ -6,6 +6,7 @@ type DDArticle{
    _id: ID!
    title: String!
    description: String!
+   content: String!
    link: String!
    date: String!
    thumbnail:String
@@ -35,19 +36,11 @@ input DDArticleInput {
   id: String
   title: String!
   description: String!
+  content: String!
   link: String!
   date: String!
   thumbnail:String!
 }
-
-type Booking {
-    _id: ID!
-    event: Event!
-    user: User!
-    createdAt: String!
-    updatedAt: String!
-}
-
 type Event {
   _id: ID!
   title: String!
@@ -84,7 +77,6 @@ input UserInput {
 
 type RootQuery {
     events: [Event!]!
-    bookings: [Booking!]!
     ddArticles: [DDArticle!]!
     getDdArticle(artId: String!): DDArticle
     ddPositions: [DDPosition!]!
@@ -95,8 +87,6 @@ type RootMutation {
     login(email: String!, password: String!): AuthData!
     createEvent(eventInput: EventInput): Event
     createUser(userInput: UserInput): User
-    bookEvent(eventId: ID!): Booking!
-    cancelBooking(bookingId: ID!): Event!
     createDdArticle(dDArticleInput: DDArticleInput): DDArticle
     updateDdArticle(dDArticleInput: DDArticleInput): DDArticle
     removeDdArticle(artId: String!): DDArticle
