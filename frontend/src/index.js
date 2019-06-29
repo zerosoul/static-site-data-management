@@ -24,8 +24,8 @@ const client = new ApolloClient({
   //  `/graphql` endpoint on the same host
   // Pass the configuration option { uri: YOUR_GRAPHQL_API_URL } to the `HttpLink` to connect
   // to a different host
-  link: authLink.concat(new HttpLink({ uri: "http://localhost:8001/graphql" })),
-  // link: new HttpLink({ uri: "http://ssde.yangerxiao.com/graphql" }),
+  // link: authLink.concat(new HttpLink({ uri: "http://localhost:8001/graphql" })),
+  link: new HttpLink({ uri: "http://ssde.yangerxiao.com/graphql" }),
   cache: new InMemoryCache()
 });
 
