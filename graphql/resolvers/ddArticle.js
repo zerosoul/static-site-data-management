@@ -6,11 +6,13 @@ module.exports = {
     //   throw new Error("Unauthenticated!");
     // }
     try {
-      const arts = await DDArticle.find();
-      console.log("dd arts", arts);
+      const arts = await DDArticle.find().sort({
+        date: -1
+      });
+      // console.log("dd arts", arts);
 
-      return arts.map(art => {
-        return art;
+      return arts.sort((x, y) => {
+        return x.isTop === y.isTop ? 0 : x.isTop ? -1 : 1;
       });
     } catch (err) {
       throw err;
@@ -60,7 +62,9 @@ module.exports = {
       date,
       link,
       thumbnail,
-      content
+      content,
+      type,
+      isTop
     } = args.dDArticleInput;
     console.log("art input", args);
 
@@ -70,9 +74,10 @@ module.exports = {
       content,
       date: new Date(date),
       link,
-      thumbnail
+      thumbnail,
+      type,
+      isTop
     });
-    let createArticle;
     try {
       const result = await art.save();
       console.log("art create result", result);

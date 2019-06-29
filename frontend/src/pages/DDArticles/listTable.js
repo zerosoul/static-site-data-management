@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import { Query, Mutation } from "react-apollo";
-import { Table, Button, message, Popconfirm } from "antd";
+import { Table, Button, message, Popconfirm, Tag, Tooltip, Badge } from "antd";
 import moment from "moment";
 import styled from "styled-components";
-import { ListQuery, RemoveDdArticle } from "./actions.gql";
+import { ListQuery, RemoveDdArticle, UpdateDdArticle } from "./actions.gql";
 
-const StyledLink = styled.a`
-  max-width: 12rem;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+const VerticalCell = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  > span {
+    margin-top: 0.4rem;
+  }
 `;
 export default function List({ handleModalVisible }) {
   const columns = [
@@ -24,52 +25,47 @@ export default function List({ handleModalVisible }) {
       title: "描述",
       dataIndex: "description",
       key: "description",
-      width: 300
-    },
-    {
-      title: "外链",
-      dataIndex: "link",
-      key: "link",
-      width: 300,
-      render: l => {
-        return (
-          <StyledLink target="_blank" href={l}>
-            {l}
-          </StyledLink>
-        );
-      }
+      width: 400
     },
     {
       title: "缩略图",
       dataIndex: "thumbnail",
       key: "thumbnail",
-      render: img => (
-        <>
-          {img ? (
-            <img style={{ maxWidth: "8rem" }} src={img} alt="缩略图" />
-          ) : (
-            <span>暂无</span>
-          )}
-        </>
+      width: 200,
+      render: (img, { link }) => (
+        <Tooltip placement="left" title={link}>
+          <a href={link} target="_blank">
+            {img ? (
+              <img style={{ maxWidth: "8rem" }} src={img} alt="缩略图" />
+            ) : (
+              <span>暂无缩略图</span>
+            )}
+          </a>
+        </Tooltip>
       )
     },
     {
-      title: "发表时间",
+      title: "类型/发表时间",
       dataIndex: "date",
       key: "date",
-      render: d => (
-        <>
+      width: 150,
+      render: (d, { type }) => (
+        <VerticalCell>
+          <Tag color={type == 1 ? "green" : "#f50"}>
+            {type == 1 ? "新闻稿" : "点滴人物"}
+          </Tag>
           <span>{moment(new Date(+d)).format("YYYY/MM/DD HH:mm:ss")}</span>
-        </>
+        </VerticalCell>
       )
     },
     {
       title: "操作",
       dataIndex: "options",
       key: "options",
-      width: 200,
+      width: 240,
+      // fixed: "right",
       render: (d, item) => {
-        const { _id } = item;
+        const { _id, isTop } = item;
         return (
           <Button.Group size="small">
             <Button
@@ -112,6 +108,45 @@ export default function List({ handleModalVisible }) {
                 );
               }}
             </Mutation>
+            <Mutation
+              mutation={UpdateDdArticle}
+              refetchQueries={result => {
+                return [{ query: ListQuery }];
+              }}
+            >
+              {(updateDdArticle, { data, loading, err }) => {
+                if (err) {
+                  message.error("操作出错了");
+                }
+                if (data && data.title) {
+                  message.success("操作成功");
+                }
+                return (
+                  <Popconfirm
+                    okText="确定"
+                    cancelText="取消"
+                    onConfirm={async () => {
+                      const resp = await updateDdArticle({
+                        variables: { id: _id, isTop: !isTop }
+                      });
+                    }}
+                    title={isTop ? "确定撤顶？" : "确定置顶？"}
+                  >
+                    <Button loading={loading}>
+                      {isTop ? "撤顶" : "置顶"}
+                      {isTop && (
+                        <Badge
+                          style={{ marginLeft: "8px" }}
+                          color="#f50"
+                          status="processing"
+                          dot={true}
+                        />
+                      )}
+                    </Button>
+                  </Popconfirm>
+                );
+              }}
+            </Mutation>
           </Button.Group>
         );
       }
@@ -135,6 +170,7 @@ export default function List({ handleModalVisible }) {
             columns={columns}
             dataSource={data.ddArticles}
             loading={loading || networkStatus == 4}
+            scroll={{ x: 1200 }}
             pagination={{
               size: "small",
               pageSize: 10,

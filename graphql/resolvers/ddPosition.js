@@ -6,7 +6,9 @@ module.exports = {
     //   throw new Error("Unauthenticated!");
     // }
     try {
-      const positions = await DDPosition.find();
+      const positions = await DDPosition.find().sort({
+        updateTime: -1
+      });
       console.log("dd positions", positions);
 
       return positions.map(pos => {

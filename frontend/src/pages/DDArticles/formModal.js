@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Mutation, Query } from "react-apollo";
 import moment from "moment";
+import E from "wangeditor";
+
+import imageCompression from "browser-image-compression";
 import {
   Form,
   Input,
@@ -13,7 +16,9 @@ import {
   Row,
   Col,
   Divider,
-  Spin
+  Spin,
+  Select,
+  Switch
 } from "antd";
 import {
   InsertDdArticle,
@@ -23,15 +28,24 @@ import {
 } from "./actions.gql";
 const ColLayout = {
   labelCol: {
-    span: 6
+    span: 4
   },
   wrapperCol: {
-    span: 18
+    span: 20
+  }
+};
+const ThinColLayout = {
+  labelCol: {
+    span: 8
+  },
+  wrapperCol: {
+    span: 16
   }
 };
 
 const { Item } = Form;
-function getBase64(img, callback) {
+const { Option } = Select;
+function getBase64(img) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(img);
@@ -39,16 +53,39 @@ function getBase64(img, callback) {
     reader.onerror = error => reject(error);
   });
 }
-function beforeUpload(file) {
-  const isLt50K = file.size / 1024 < 50;
-  if (!isLt50K) {
-    message.error("缩略图要小于50K");
+const compress = async (image, opts = {}) => {
+  let options = {
+    maxSizeMB: 0.05,
+    maxWidthOrHeight: 300,
+    useWebWorker: true,
+    ...opts
+  };
+  try {
+    const compressedFile = await imageCompression(image, options);
+    console.log(
+      "compressedFile instanceof Blob",
+      compressedFile instanceof Blob
+    ); // true
+    console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+    return compressedFile;
+    // await uploadToServer(compressedFile); // write your own logic
+  } catch (error) {
+    console.log(error);
   }
+};
+function beforeUpload(file) {
+  // const isLt50K = file.size / 1024 < 50;
+  // if (!isLt50K) {
+  //   message.error("缩略图要小于50K");
+  // }
   return false;
 }
+let Editor = null;
 const EditForm = ({ form, handleModalVisible, id = null, article }) => {
   const [imgUrl, setImgUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [editorContent, setEditorContent] = useState("");
+  const editor = useRef(null);
   console.log("form id", id);
   const artId = id;
   const submitHandler = (e, editArticle) => {
@@ -65,16 +102,30 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
           link,
           date = tmp,
           thumbnail,
-          content
+          content = "",
+          type,
+          isTop
         } = values;
         thumbnail = imgUrl || thumbnail || "";
+        type = Number(type);
         date = moment(date).format("YYYY-MM-DD HH:mm:ss");
-        const data = { title, description, link, date, thumbnail };
+        content = editorContent;
+        const data = {
+          title,
+          description,
+          content,
+          link,
+          date,
+          thumbnail,
+          type,
+          isTop
+        };
         if (artId) {
           console.log("form submit id", artId);
           data.id = artId;
         }
-        console.info("form values", title, description, link, date, thumbnail);
+        console.info("form values", data);
+        // return;
         const rep = await editArticle({
           variables: data
         });
@@ -93,17 +144,50 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
   const handleChange = async info => {
     console.log("info", info);
     const [file] = info.fileList;
+    console.log("file info", file);
+    // return;
     if (file) {
       // Get this url from response in real world.
-      const imageUrl = await getBase64(file.originFileObj);
+      const compressedFile = await compress(file.originFileObj);
+      const imageUrl = await getBase64(compressedFile);
       setImgUrl(imageUrl);
       setUploading(false);
     }
   };
+  useEffect(() => {
+    const elem = editor.current;
+    Editor = new E(elem);
+    // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
+    Editor.customConfig.onchange = html => {
+      setEditorContent(html);
+    };
+    // Editor.customConfig.uploadImgShowBase64 = true;
+    Editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+    Editor.customConfig.customUploadImg = async (files, insert) => {
+      // files 是 input 中选中的文件列表
+      // insert 是获取图片 url 后，插入到编辑器的方法
+      console.log("image", files);
+      const compressedFile = await compress(files[0], {
+        maxSizeMB: 3,
+        maxWidthOrHeight: 600
+      });
+      const imgUrl = await getBase64(compressedFile);
+      // return;
+      // 上传代码返回结果之后，将图片插入到编辑器中
+      insert(imgUrl);
+    };
+    Editor.create();
+  }, []);
+  useEffect(() => {
+    if (Editor) {
+      Editor.txt.html(article.content);
+    }
+  }, [article.content]);
   return (
     <Mutation
       mutation={artId ? UpdateDdArticle : InsertDdArticle}
       refetchQueries={result => [{ query: ListQuery }]}
+      fetchPolicy="no-cache"
     >
       {(editArticle, { loading, data, error }) => {
         if (error) return "error";
@@ -180,8 +264,8 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
               </Col>
             </Row>
             <Row>
-              <Col span={12}>
-                <Item label="上传缩略图" {...ColLayout}>
+              <Col span={6}>
+                <Item label="缩略图" {...ThinColLayout}>
                   {getFieldDecorator("thumbnail", {
                     rules: [],
                     initialValue: article.thumbnail
@@ -208,6 +292,34 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
                   )}
                 </Item>
               </Col>
+              <Col span={6}>
+                <Item label="类型" {...ThinColLayout}>
+                  {getFieldDecorator("type", {
+                    rules: [],
+                    initialValue: String(article.type || 1)
+                  })(
+                    <Select>
+                      <Option value="1">新闻稿</Option>
+                      <Option value="2">点滴人物</Option>
+                    </Select>
+                  )}
+                </Item>
+              </Col>
+              <Col span={12}>
+                <Item label="置顶" {...ThinColLayout}>
+                  {getFieldDecorator("isTop", {
+                    rules: [],
+                    valuePropName: "checked",
+                    initialValue: !!article.isTop
+                  })(<Switch />)}
+                </Item>
+              </Col>
+            </Row>
+            <Divider />
+            <Row>
+              <Col span={24}>
+                <div ref={editor} />
+              </Col>
             </Row>
             <Divider />
             <Row>
@@ -227,7 +339,12 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
 };
 const HOCForm = Form.create({ name: "ddarticle" })(EditForm);
 const FormModal = ({ handleModalVisible, id }) => (
-  <Query query={GetDdArticle} variables={{ artId: id }} skip={!id}>
+  <Query
+    query={GetDdArticle}
+    fetchPolicy="network-only"
+    variables={{ artId: id }}
+    skip={!id}
+  >
     {({ data = {}, loading, error }) => {
       if (error) return "error";
       console.log("wtf", loading);
@@ -235,6 +352,7 @@ const FormModal = ({ handleModalVisible, id }) => (
       const { getDdArticle = {} } = data;
       return (
         <Modal
+          maskClosable={false}
           width={"90vw"}
           title={id ? "更新" : "创建"}
           visible={true}

@@ -13,7 +13,6 @@ const eventSchema = new Schema({
   },
   content: {
     type: String,
-    required: true,
     default: ""
   },
   thumbnail: {
@@ -28,6 +27,15 @@ const eventSchema = new Schema({
     type: Date,
     required: true,
     default: Date.now
+  },
+  // 1 新闻 2 点滴人物
+  type: {
+    type: Number,
+    default: 1
+  },
+  isTop: {
+    type: Boolean,
+    default: false
   }
 });
 
