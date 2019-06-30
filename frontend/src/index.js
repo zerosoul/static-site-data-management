@@ -8,6 +8,8 @@ import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloProvider } from "react-apollo";
 import "@babel/polyfill";
+console.log(process.env.NODE_ENV);
+
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   const token = localStorage.getItem("AUTH_TOKEN");
@@ -19,16 +21,17 @@ const authLink = setContext((_, { headers }) => {
     }
   };
 });
+const API =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:8001/graphql"
+    : "http://ssde.yangerxiao.com/graphql";
 const client = new ApolloClient({
   // By default, this client will send queries to the
   //  `/graphql` endpoint on the same host
   // Pass the configuration option { uri: YOUR_GRAPHQL_API_URL } to the `HttpLink` to connect
   // to a different host
-  link: authLink.concat(new HttpLink({ uri: "http://localhost:8001/graphql" })),
-  // link: new HttpLink({ uri: "http://ssde.yangerxiao.com/graphql" }),
-  // link: authLink.concat(
-  //   new HttpLink({ uri: "http://ssde.yangerxiao.com/graphql" })
-  // ),
+
+  link: authLink.concat(new HttpLink({ uri: API })),
   cache: new InMemoryCache()
 });
 
