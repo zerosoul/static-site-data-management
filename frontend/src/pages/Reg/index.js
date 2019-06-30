@@ -4,11 +4,11 @@ import { Button, Form, Input, message } from "antd";
 import { Mutation } from "react-apollo";
 import { Reg } from "./actions.gql";
 import { isLogin } from "../../auth";
-
-const StyledForm = styled(Form)`
-  width: 25rem;
-  max-width: 80%;
-  margin: 5rem auto;
+const StyledForm = styled.form`
+  margin: 0 auto;
+  max-width: 18rem;
+  border: 1px solid #ccc;
+  padding: 1rem 2rem;
 `;
 const RegPage = ({ form, history }) => {
   const [errMsg, setErrMsg] = useState("");
@@ -100,8 +100,6 @@ const RegPage = ({ form, history }) => {
               <Button loading={loading} type="primary" htmlType="submit">
                 注册
               </Button>
-
-              <Button href="/login">登录</Button>
             </div>
           </StyledForm>
         );

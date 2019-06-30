@@ -7,6 +7,8 @@ import { HttpLink } from "apollo-link-http";
 import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloProvider } from "react-apollo";
+import { BrowserRouter } from "react-router-dom";
+
 import "@babel/polyfill";
 console.log(process.env.NODE_ENV);
 
@@ -82,7 +84,9 @@ ReactDOM.render(
     <Reset />
     <GloableStyle />
     <ApolloProvider client={client}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ApolloProvider>
   </>,
   document.getElementById("root")

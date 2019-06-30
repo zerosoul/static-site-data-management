@@ -26,21 +26,25 @@ module.exports = {
     }
   },
   login: async ({ email, password }) => {
-    const user = await User.findOne({ email: email });
-    if (!user) {
-      throw new Error("账号名或密码不正确");
-    }
-    const isEqual = await bcrypt.compare(password, user.password);
-    if (!isEqual) {
-      throw new Error("账号名或密码不正确");
-    }
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      "somesupersecretkey",
-      {
-        expiresIn: "1d"
+    try {
+      const user = await User.findOne({ email: email });
+      if (!user) {
+        throw new Error("账号名或密码不正确");
       }
-    );
-    return { userId: user.id, token: token, tokenExpiration: 1 };
+      const isEqual = await bcrypt.compare(password, user.password);
+      if (!isEqual) {
+        throw new Error("账号名或密码不正确");
+      }
+      const token = jwt.sign(
+        { userId: user.id, email: user.email },
+        "somesupersecretkey",
+        {
+          expiresIn: "1d"
+        }
+      );
+      return { userId: user.id, token: token, tokenExpiration: 1 };
+    } catch (error) {
+      throw error;
+    }
   }
 };

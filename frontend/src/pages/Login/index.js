@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { Mutation } from "react-apollo";
 import { Login } from "./actions.gql";
 import { isLogin } from "../../auth";
 
-const StyledForm = styled(Form)`
-  width: 25rem;
-  max-width: 80%;
-  margin: 5rem auto;
+const StyledForm = styled.form`
+  margin: 0 auto;
+  max-width: 15rem;
+  border: 1px solid #ccc;
+  padding: 1rem 2rem;
 `;
 const LoginPage = ({ form, location: { state = {} }, history }) => {
   console.log("state", state);
+  const [errMsg, setErrMsg] = useState("");
 
   const { from = "/" } = state;
   if (isLogin()) {
@@ -27,12 +29,21 @@ const LoginPage = ({ form, location: { state = {} }, history }) => {
       }
     });
   };
+  useEffect(() => {
+    if (errMsg) {
+      message.warning(errMsg);
+    }
+  }, [errMsg]);
 
   const { getFieldDecorator } = form;
   return (
     <Mutation mutation={Login}>
       {(Login, { loading, data, error }) => {
-        if (error) return "error";
+        if (error) {
+          console.log("error", error);
+
+          setErrMsg(error.message);
+        }
         if (data) {
           console.log("login data", data);
           const { token, userId, tokenExpiration } = data.login || {};
@@ -52,6 +63,7 @@ const LoginPage = ({ form, location: { state = {} }, history }) => {
           >
             <Form.Item label="邮箱">
               {getFieldDecorator("email", {
+                validateTrigger: "onBlur",
                 rules: [
                   {
                     type: "email",
@@ -79,8 +91,6 @@ const LoginPage = ({ form, location: { state = {} }, history }) => {
               <Button loading={loading} type="primary" htmlType="submit">
                 登录
               </Button>
-
-              <Button href="/reg">注册</Button>
             </div>
           </StyledForm>
         );

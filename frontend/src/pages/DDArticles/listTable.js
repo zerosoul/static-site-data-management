@@ -1,6 +1,16 @@
 import React, { useEffect } from "react";
 import { Query, Mutation } from "react-apollo";
-import { Table, Button, message, Popconfirm, Tag, Tooltip, Badge } from "antd";
+import {
+  Table,
+  Button,
+  message,
+  Popconfirm,
+  Tag,
+  Tooltip,
+  Badge,
+  Row,
+  Col
+} from "antd";
 import moment from "moment";
 import styled from "styled-components";
 import { ListQuery, RemoveDdArticle, UpdateDdArticle } from "./actions.gql";
@@ -19,21 +29,21 @@ export default function List({ handleModalVisible }) {
       title: "标题",
       dataIndex: "title",
       key: "title",
-      width: 240
+      width: 200
     },
     {
       title: "描述",
       dataIndex: "description",
       key: "description",
-      width: 400
+      width: 220
     },
     {
       title: "缩略图",
       dataIndex: "thumbnail",
       key: "thumbnail",
-      width: 200,
+      width: 220,
       render: (img, { link }) => (
-        <Tooltip placement="left" title={link}>
+        <Tooltip placement="right" title={link}>
           <a href={link} target="_blank">
             {img ? (
               <img style={{ maxWidth: "8rem" }} src={img} alt="缩略图" />
@@ -48,7 +58,7 @@ export default function List({ handleModalVisible }) {
       title: "类型/发表时间",
       dataIndex: "date",
       key: "date",
-      width: 150,
+      width: 200,
       render: (d, { type }) => (
         <VerticalCell>
           <Tag color={type == 1 ? "green" : "#f50"}>
@@ -63,7 +73,6 @@ export default function List({ handleModalVisible }) {
       dataIndex: "options",
       key: "options",
       width: 240,
-      // fixed: "right",
       render: (d, item) => {
         const { _id, isTop } = item;
         return (
@@ -166,11 +175,12 @@ export default function List({ handleModalVisible }) {
 
         return (
           <Table
+            bordered={true}
+            size="middle"
             rowKey={"_id"}
             columns={columns}
             dataSource={data.ddArticles}
             loading={loading}
-            scroll={{ x: 1200 }}
             pagination={{
               size: "small",
               pageSize: 10,

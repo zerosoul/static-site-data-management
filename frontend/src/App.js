@@ -1,17 +1,26 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
-// import { withRouter } from "react-router";
+import { Route, Redirect, Switch, Link } from "react-router-dom";
+import { withRouter } from "react-router";
 import styled from "styled-components";
+
 import { Layout, Menu, Icon, Divider, Button } from "antd";
 
 const { Header, Sider, Content, Footer } = Layout;
-
+const { SubMenu } = Menu;
 import DDArticles from "./pages/DDArticles";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Reg from "./pages/Reg";
 import { updateExp, isLogin, logout } from "./auth";
 import DDPositions from "./pages/DDPositions";
+
+const StyledBtn = styled(Button)`
+  margin-right: 1rem;
+  > a {
+    color: #fff;
+    padding-left: 5px;
+  }
+`;
 const AuthRoute = props => {
   if (isLogin()) {
     // update expire duration
@@ -37,7 +46,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: false
+      isLogin: false,
+      pathName: "/"
     };
   }
   handleLogout = () => {
@@ -48,45 +58,64 @@ class App extends Component {
     });
   };
   componentDidMount() {
+    const { pathname } = this.props.location;
+
     this.setState({
-      isLogin: isLogin()
+      isLogin: isLogin(),
+      pathName: pathname
     });
-    window.onstorage = evt => {
-      console.log("storage", evt);
-    };
+    this.props.history.listen((location, action) => {
+      // location is an object like window.location
+      this.setState({
+        pathName: location.pathname,
+        isLogin: isLogin()
+      });
+      console.log("path changed", action, location.pathname, location.state);
+    });
   }
   render() {
-    const { isLogin } = this.state;
+    const { isLogin, pathName } = this.state;
+    console.log("path name", this.props);
+
     return (
       <Layout>
         <StyledHeader>
           {/* <div className="logo" /> */}
           {isLogin && (
-            <Menu mode="horizontal" theme="dark" style={{ lineHeight: "64px" }}>
-              <Menu.Item key="1">
-                <a href="/ddarticles">录入文章</a>
+            <Menu
+              selectedKeys={[pathName]}
+              mode="horizontal"
+              theme="dark"
+              style={{ lineHeight: "64px" }}
+            >
+              <Menu.Item key={"/"}>
+                <Link to={"/"}>首页</Link>
               </Menu.Item>
+              <SubMenu title={<span>{"官网数据管理"}</span>}>
+                <Menu.Item key={"/ddarticles"}>
+                  <Link to={"/ddarticles"}>录入文章</Link>
+                </Menu.Item>
 
-              <Menu.Item key="2">
-                <a href="/ddpositions">录入职位</a>
-              </Menu.Item>
+                <Menu.Item key="/ddpositions">
+                  <Link to={"/ddpositions"}>录入职位</Link>
+                </Menu.Item>
+              </SubMenu>
             </Menu>
           )}
-          {/* <Divider type="vertical" /> */}
           <div className="btns">
-            <Button
-              type="link"
+            <StyledBtn
               ghost
               href={isLogin ? null : "/login"}
               icon="poweroff"
-              onClick={this.handleLogout}
+              onClick={isLogin ? this.handleLogout : null}
             >
-              {isLogin ? `退出` : `登录`}
-            </Button>
+              {isLogin ? `退出` : <Link to="/login">登录</Link>}
+            </StyledBtn>
+
             {!isLogin && (
-              <Button icon="user-add" ghost type="link" href="/reg">
-                注册
-              </Button>
+              <StyledBtn icon="user-add" ghost>
+                <Link to="/reg">注册</Link>
+              </StyledBtn>
             )}
           </div>
         </StyledHeader>
@@ -98,15 +127,13 @@ class App extends Component {
             minHeight: "80vh"
           }}
         >
-          <BrowserRouter>
-            <Switch>
-              <Route path="/login" component={Login} />
-              <Route path="/reg" component={Reg} />
-              <AuthRoute path="/" exact component={Home} />
-              <AuthRoute path="/ddarticles" component={DDArticles} />
-              <AuthRoute path="/ddpositions" component={DDPositions} />
-            </Switch>
-          </BrowserRouter>
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/reg" component={Reg} />
+            <AuthRoute path="/" exact component={Home} />
+            <AuthRoute path="/ddarticles" component={DDArticles} />
+            <AuthRoute path="/ddpositions" component={DDPositions} />
+          </Switch>
         </Content>
         <Footer>footer</Footer>
       </Layout>
@@ -114,4 +141,5 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
+// export default App;

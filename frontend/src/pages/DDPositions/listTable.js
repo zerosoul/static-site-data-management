@@ -130,6 +130,8 @@ export default function List({ handleModalVisible }) {
 
         return (
           <Table
+            bordered={true}
+            size="middle"
             rowKey={"_id"}
             columns={columns}
             dataSource={data.ddPositions}
