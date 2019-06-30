@@ -45,6 +45,19 @@ input DDArticleInput {
   isTop:Boolean
   type:Int
 }
+
+type User {
+  _id: ID!
+  name: String!
+  email: String!
+  password: String
+}
+
+input UserInput {
+  name: String
+  email: String!
+  password: String!
+}
 type Event {
   _id: ID!
   title: String!
@@ -52,13 +65,6 @@ type Event {
   price: Float!
   date: String!
   creator: User!
-}
-
-type User {
-  _id: ID!
-  email: String!
-  password: String
-  createdEvents: [Event!]
 }
 
 type AuthData {
@@ -74,10 +80,6 @@ input EventInput {
   date: String!
 }
 
-input UserInput {
-  email: String!
-  password: String!
-}
 
 type RootQuery {
     events: [Event!]!
@@ -89,8 +91,8 @@ type RootQuery {
   
 type RootMutation {
     login(email: String!, password: String!): AuthData!
+    reg(userInput: UserInput): User
     createEvent(eventInput: EventInput): Event
-    createUser(userInput: UserInput): User
     createDdArticle(dDArticleInput: DDArticleInput): DDArticle
     updateDdArticle(dDArticleInput: DDArticleInput): DDArticle
     removeDdArticle(artId: String!): DDArticle

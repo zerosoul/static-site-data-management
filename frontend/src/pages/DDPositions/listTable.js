@@ -15,7 +15,7 @@ const StyledLink = styled.a`
 export default function List({ handleModalVisible }) {
   const columns = [
     {
-      title: "标题",
+      title: "职位名称",
       dataIndex: "title",
       key: "title",
       width: 240
@@ -39,7 +39,7 @@ export default function List({ handleModalVisible }) {
       width: 140
     },
     {
-      title: "外链",
+      title: "外链(拉钩/Boss等招聘链接)",
       dataIndex: "link",
       key: "link",
       width: 300,

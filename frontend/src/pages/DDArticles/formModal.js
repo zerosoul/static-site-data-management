@@ -182,6 +182,7 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
     if (Editor) {
       Editor.txt.html(article.content);
     }
+    setEditorContent(article.content);
   }, [article.content]);
   return (
     <Mutation
@@ -238,12 +239,7 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
               <Col span={12}>
                 <Item label="外链接" {...ColLayout}>
                   {getFieldDecorator("link", {
-                    rules: [
-                      {
-                        required: true,
-                        message: "请输入外链"
-                      }
-                    ],
+                    rules: [],
                     initialValue: article.link
                   })(<Input type="url" placeholder="请输入外链" />)}
                 </Item>

@@ -169,7 +169,7 @@ export default function List({ handleModalVisible }) {
             rowKey={"_id"}
             columns={columns}
             dataSource={data.ddArticles}
-            loading={loading || networkStatus == 4}
+            loading={loading}
             scroll={{ x: 1200 }}
             pagination={{
               size: "small",

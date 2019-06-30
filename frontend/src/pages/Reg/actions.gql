@@ -1,0 +1,7 @@
+mutation Reg($name: String!, $email: String!, $password: String!) {
+  reg(userInput: { name: $name, email: $email, password: $password }) {
+    _id
+    email
+    name
+  }
+}
