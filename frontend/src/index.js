@@ -8,6 +8,12 @@ import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloProvider } from "react-apollo";
 import { BrowserRouter } from "react-router-dom";
+import { LocaleProvider } from "antd";
+import moment from "moment";
+import zh_CN from "antd/lib/locale-provider/zh_CN";
+import "moment/locale/zh-cn";
+
+moment.locale("zh-cn");
 
 import "@babel/polyfill";
 console.log(process.env.NODE_ENV);
@@ -85,7 +91,9 @@ ReactDOM.render(
     <GloableStyle />
     <ApolloProvider client={client}>
       <BrowserRouter>
-        <App />
+        <LocaleProvider locale={zh_CN}>
+          <App />
+        </LocaleProvider>
       </BrowserRouter>
     </ApolloProvider>
   </>,
