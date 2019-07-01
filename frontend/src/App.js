@@ -9,6 +9,7 @@ const { Header, Sider, Content, Footer } = Layout;
 const { SubMenu } = Menu;
 import DDArticles from "./pages/DDArticles";
 import Home from "./pages/Home";
+import Codes from "./pages/Codes";
 import Login from "./pages/Login";
 import Reg from "./pages/Reg";
 import { updateExp, isLogin, logout } from "./auth";
@@ -91,13 +92,13 @@ class App extends Component {
               <Menu.Item key={"/"}>
                 <Link to={"/"}>首页</Link>
               </Menu.Item>
-              <SubMenu title={<span>{"官网数据管理"}</span>}>
+              <SubMenu title={<span>{"官网数据"}</span>}>
                 <Menu.Item key={"/ddarticles"}>
-                  <Link to={"/ddarticles"}>录入文章</Link>
+                  <Link to={"/ddarticles"}>文章</Link>
                 </Menu.Item>
 
                 <Menu.Item key="/ddpositions">
-                  <Link to={"/ddpositions"}>录入职位</Link>
+                  <Link to={"/ddpositions"}>职位</Link>
                 </Menu.Item>
               </SubMenu>
             </Menu>
@@ -131,6 +132,7 @@ class App extends Component {
             <Route path="/login" component={Login} />
             <Route path="/reg" component={Reg} />
             <AuthRoute path="/" exact component={Home} />
+            <AuthRoute path="/codes" component={Codes} />
             <AuthRoute path="/ddarticles" component={DDArticles} />
             <AuthRoute path="/ddpositions" component={DDPositions} />
           </Switch>

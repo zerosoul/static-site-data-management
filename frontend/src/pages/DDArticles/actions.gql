@@ -60,7 +60,7 @@ mutation UpdateDdArticle(
 mutation InsertDdArticle(
   $title: String!
   $description: String!
-  $content: String!
+  $content: String
   $link: String!
   $date: String!
   $thumbnail: String!

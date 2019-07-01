@@ -1,0 +1,35 @@
+query ListQuery {
+  codes {
+    _id
+    value
+    used
+    role
+  }
+}
+query GetCode($codeId: String!) {
+  getCode(codeId: $codeId) {
+    _id
+    role
+    value
+    used
+  }
+}
+mutation RemoveCode($codeId: String!) {
+  removeCode(codeId: $codeId) {
+    value
+    used
+  }
+}
+mutation UpdateCode($id: String!, $value: String!, $used: Boolean, $role: Int) {
+  updateCode(
+    inviteCodeInput: { id: $id, value: $value, used: $used, role: $role }
+  ) {
+    value
+    used
+  }
+}
+mutation InsertCode($value: String!, $used: Boolean, $role: Int) {
+  createCode(inviteCodeInput: { value: $value, role: $role, used: $used }) {
+    value
+  }
+}

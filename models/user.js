@@ -14,6 +14,11 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true
+  },
+  // 1 管理员 2 运营
+  role: {
+    type: Number,
+    default: 2
   }
   // createdEvents: [
   //   {

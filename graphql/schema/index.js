@@ -2,11 +2,19 @@ const { buildSchema } = require("graphql");
 
 module.exports = buildSchema(`
 
+type InviteCode{
+   _id: ID!
+   value: String!
+   used: Boolean
+   usedBy: User
+   role: Int
+}
+
 type DDArticle{
    _id: ID!
    title: String!
    description: String!
-   content: String!
+   content: String
    link: String!
    date: String!
    thumbnail:String
@@ -32,6 +40,14 @@ input DDPositionInput {
   location: String!
   depart:String!
   link: String
+}
+
+input InviteCodeInput{
+  id: String
+  value: String!
+  used: Boolean
+  usedTime: String
+  role: Int
 }
 
 input DDArticleInput {
@@ -86,6 +102,8 @@ type RootQuery {
     ddArticles: [DDArticle!]!
     getDdArticle(artId: String!): DDArticle
     ddPositions: [DDPosition!]!
+    codes: [InviteCode!]!
+    getCode(codeId: String!): InviteCode
     getDdPosition(posId: String!): DDPosition
 }
   
@@ -99,6 +117,9 @@ type RootMutation {
     createDdPosition(dDPositionInput: DDPositionInput): DDPosition
     updateDdPosition(dDPositionInput: DDPositionInput): DDPosition
     removeDdPosition(posId: String!): DDPosition
+    removeCode(codeId: String!): InviteCode
+    createCode(inviteCodeInput: InviteCodeInput): InviteCode
+    updateCode(inviteCodeInput: InviteCodeInput): InviteCode
 }
 
 schema {
