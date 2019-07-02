@@ -488,23 +488,7 @@ module.exports = function(webpackEnv) {
             new RegExp("/[^/]+\\.[^/]+$")
           ]
         }),
-      isEnvProduction &&
-        new AutoDllPlugin({
-          context: path.join(__dirname, ".."),
-          inject: true, //自动在index.html引入dll
-          debug: true,
-          filename: "[name]_[hash].dll.js",
-          path: "./dll",
-          entry: {
-            react: [
-              "react",
-              "react-dom",
-              "react-router-dom",
-              "styled-components"
-            ],
-            antdVendor: ["@ant-design/icons/lib/dist"]
-          }
-        }),
+
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
