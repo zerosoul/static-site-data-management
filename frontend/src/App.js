@@ -1,19 +1,26 @@
-import React, { Component } from "react";
+import React, { Component, lazy, Suspense } from "react";
 import { Route, Redirect, Switch, Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 
-import { Layout, Menu, Icon, Divider, Button } from "antd";
+import { Layout, Menu, Icon, Divider, Button, Skeleton } from "antd";
 
 const { Header, Sider, Content, Footer } = Layout;
 const { SubMenu } = Menu;
-import DDArticles from "./pages/DDArticles";
-import Home from "./pages/Home";
-import Codes from "./pages/Codes";
-import Login from "./pages/Login";
-import Reg from "./pages/Reg";
+// import DDArticles from "./pages/DDArticles";
+const Home = lazy(() => import("./pages/Home"));
+const DDArticles = lazy(() => import("./pages/DDArticles"));
+const DDPositions = lazy(() => import("./pages/DDPositions"));
+const Codes = lazy(() => import("./pages/Codes"));
+const Login = lazy(() => import("./pages/Login"));
+const Reg = lazy(() => import("./pages/Reg"));
+
+// import DDPositions from "./pages/DDPositions";
+
+// import Codes from "./pages/Codes";
+// import Login from "./pages/Login";
+// import Reg from "./pages/Reg";
 import { updateExp, isLogin, logout } from "./auth";
-import DDPositions from "./pages/DDPositions";
 
 const StyledBtn = styled(Button)`
   margin-right: 1rem;
@@ -128,14 +135,16 @@ class App extends Component {
             minHeight: "80vh"
           }}
         >
-          <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/reg" component={Reg} />
-            <AuthRoute path="/" exact component={Home} />
-            <AuthRoute path="/codes" component={Codes} />
-            <AuthRoute path="/ddarticles" component={DDArticles} />
-            <AuthRoute path="/ddpositions" component={DDPositions} />
-          </Switch>
+          <Suspense fallback={<Skeleton active />}>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/reg" component={Reg} />
+              <AuthRoute path="/" exact component={Home} />
+              <AuthRoute path="/codes" component={Codes} />
+              <AuthRoute path="/ddarticles" component={DDArticles} />
+              <AuthRoute path="/ddpositions" component={DDPositions} />
+            </Switch>
+          </Suspense>
         </Content>
         <Footer>footer</Footer>
       </Layout>

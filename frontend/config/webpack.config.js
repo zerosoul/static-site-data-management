@@ -2,6 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const webpack = require("webpack");
 // const resolve = require("resolve");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const AutoDllPlugin = require("autodll-webpack-plugin");
+
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
@@ -15,7 +18,6 @@ const InterpolateHtmlPlugin = require("react-dev-utils/InterpolateHtmlPlugin");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
 const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
 const ModuleScopePlugin = require("react-dev-utils/ModuleScopePlugin");
-const getCSSModuleLocalIdent = require("react-dev-utils/getCSSModuleLocalIdent");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
 const paths = require("./paths");
 const getClientEnvironment = require("./env");
@@ -488,6 +490,28 @@ module.exports = function(webpackEnv) {
             // public/ and not a SPA route
             new RegExp("/[^/]+\\.[^/]+$")
           ]
+        }),
+      isEnvProduction &&
+        new AutoDllPlugin({
+          context: path.join(__dirname, ".."),
+          inject: true, //自动在index.html引入dll
+          debug: true,
+          filename: "[name]_[hash].dll.js",
+          path: "./dll",
+          entry: {
+            react: [
+              "react",
+              "react-dom",
+              "react-router-dom",
+              "styled-components"
+            ],
+            antdVendor: ["@ant-design/icons/lib/dist"]
+          }
+        }),
+      isEnvProduction &&
+        new BundleAnalyzerPlugin({
+          openAnalyzer: false,
+          analyzerMode: "static"
         })
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.

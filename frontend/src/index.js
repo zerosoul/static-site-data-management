@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
 import { Reset } from "styled-reset";
 import { createGlobalStyle } from "styled-components";
@@ -8,7 +8,7 @@ import { setContext } from "apollo-link-context";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { ApolloProvider } from "react-apollo";
 import { BrowserRouter } from "react-router-dom";
-import { LocaleProvider } from "antd";
+import { LocaleProvider, Skeleton } from "antd";
 import moment from "moment";
 import zh_CN from "antd/lib/locale-provider/zh_CN";
 import "moment/locale/zh-cn";
@@ -83,7 +83,8 @@ body {
 }
 
 `;
-import App from "./App";
+const App = lazy(() => import("./App"));
+// import App from "./App";
 
 ReactDOM.render(
   <>
@@ -92,7 +93,19 @@ ReactDOM.render(
     <ApolloProvider client={client}>
       <BrowserRouter>
         <LocaleProvider locale={zh_CN}>
-          <App />
+          <Suspense
+            fallback={
+              <Skeleton
+                paragraph={{
+                  rows: 20
+                }}
+                title={false}
+                active
+              />
+            }
+          >
+            <App />
+          </Suspense>
         </LocaleProvider>
       </BrowserRouter>
     </ApolloProvider>
