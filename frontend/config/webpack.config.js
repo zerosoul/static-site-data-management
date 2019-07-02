@@ -169,6 +169,8 @@ module.exports = function(webpackEnv) {
       minimizer: [
         // This is only used in production mode
         new TerserPlugin({
+          parallel: true,
+          cache: true,
           terserOptions: {
             parse: {
               // we want terser to parse ecma 8 code. However, we don't want it
@@ -179,6 +181,7 @@ module.exports = function(webpackEnv) {
               ecma: 8
             },
             compress: {
+              drop_console: true,
               ecma: 5,
               warnings: false,
               // Disabled because of an issue with Uglify breaking seemingly valid code:
@@ -427,13 +430,7 @@ module.exports = function(webpackEnv) {
       isEnvProduction &&
         shouldInlineRuntimeChunk &&
         new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime~.+[.]js/]),
-      // Makes some environment variables available in index.html.
-      // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
-      // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-      // In production, it will be an empty string unless you specify "homepage"
-      // in `package.json`, in which case it will be the pathname of that URL.
-      // In development, this will be an empty string.
-      new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
+
       // This gives some necessary context to module not found errors, such as
       // the requesting resource.
       new ModuleNotFoundPlugin(paths.appPath),
@@ -508,6 +505,13 @@ module.exports = function(webpackEnv) {
             antdVendor: ["@ant-design/icons/lib/dist"]
           }
         }),
+      // Makes some environment variables available in index.html.
+      // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
+      // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+      // In production, it will be an empty string unless you specify "homepage"
+      // in `package.json`, in which case it will be the pathname of that URL.
+      // In development, this will be an empty string.
+      new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
       isEnvProduction &&
         new BundleAnalyzerPlugin({
           openAnalyzer: false,
