@@ -32,6 +32,10 @@ const eventSchema = new Schema({
   link: {
     type: String,
     required: false
+  },
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
   }
 });
 

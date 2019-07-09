@@ -3,7 +3,6 @@ query ListQuery {
     _id
     title
     description
-    content
     link
     date
     thumbnail

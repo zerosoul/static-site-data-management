@@ -12,6 +12,10 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
+    mobile: {
+      type: Number,
+      default: null
+    },
     password: {
       type: String,
       required: true
@@ -20,13 +24,11 @@ const userSchema = new Schema(
     role: {
       type: Number,
       default: 2
+    },
+    inviteCode: {
+      type: Schema.Types.ObjectId,
+      ref: "InviteCode"
     }
-    // createdEvents: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Event"
-    //   }
-    // ]
   },
   { timestamps: true }
 );
