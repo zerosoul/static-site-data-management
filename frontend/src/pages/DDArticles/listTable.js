@@ -23,7 +23,7 @@ const VerticalCell = styled.div`
     margin-top: 0.4rem;
   }
 `;
-export default function List({ handleModalVisible }) {
+export default function List({ handleModalVisible, retriveValues }) {
   const columns = [
     {
       title: "标题",
@@ -43,8 +43,12 @@ export default function List({ handleModalVisible }) {
       key: "thumbnail",
       width: 220,
       render: (img, { link }) => (
-        <Tooltip placement="right" title={link}>
-          <a href={link} target="_blank">
+        <Tooltip placement="top" title={link}>
+          <a
+            href={link}
+            target="_blank"
+            style={{ display: "inline-block", verticalAlign: "middle" }}
+          >
             {img ? (
               <img style={{ maxWidth: "8rem" }} src={img} alt="缩略图" />
             ) : (
@@ -119,9 +123,7 @@ export default function List({ handleModalVisible }) {
             </Mutation>
             <Mutation
               mutation={UpdateDdArticle}
-              refetchQueries={result => {
-                return [{ query: ListQuery }];
-              }}
+              refetchQueries={[{ query: ListQuery, variables: retriveValues }]}
             >
               {(updateDdArticle, { data, loading, err }) => {
                 if (err) {
@@ -165,11 +167,10 @@ export default function List({ handleModalVisible }) {
   return (
     <Query
       query={ListQuery}
-      fetchPolicy="network-only"
+      variables={{ ...retriveValues }}
       notifyOnNetworkStatusChange={true}
-      partialRefetch
     >
-      {({ loading, error, data = {}, networkStatus }) => {
+      {({ loading, error, data = {}, networkStatus, fetchMore }) => {
         if (error) return `Error! ${error.message}`;
         console.log("table loading", loading, networkStatus);
 
@@ -179,12 +180,27 @@ export default function List({ handleModalVisible }) {
             size="middle"
             rowKey={"_id"}
             columns={columns}
-            dataSource={data.ddArticles}
+            dataSource={data.ddArticles && data.ddArticles.list}
             loading={loading}
             pagination={{
+              onChange: page => {
+                console.log("page change", page);
+                fetchMore({
+                  variables: {
+                    ...retriveValues,
+                    page,
+                    limit: 10
+                  },
+                  updateQuery: (prev, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) return prev;
+                    return fetchMoreResult;
+                  }
+                });
+              },
+
               size: "small",
               pageSize: 10,
-              total: data.ddArticles && data.ddArticles.length
+              total: data.ddArticles && data.ddArticles.total
             }}
           />
         );

@@ -50,6 +50,7 @@ input InviteCodeInput{
   role: Int
 }
 
+
 input DDArticleInput {
   id: String
   title: String
@@ -74,32 +75,23 @@ input UserInput {
   email: String!
   password: String!
 }
-type Event {
-  _id: ID!
-  title: String!
-  description: String!
-  price: Float!
-  date: String!
-  creator: User!
-}
 
 type AuthData {
   userId: ID!
   token: String!
   tokenExpiration: Int!
 }
-
-input EventInput {
-  title: String!
-  description: String!
-  price: Float!
-  date: String!
+type DDArticleResult{
+  list:[DDArticle]
+  currPage:Int
+  pageSize:Int
+  total:Int
 }
 
 
+
 type RootQuery {
-    events: [Event!]!
-    ddArticles: [DDArticle!]!
+    ddArticles(page:Int,limit:Int,title: String,type: String): DDArticleResult
     getDdArticle(artId: String!): DDArticle
     ddPositions: [DDPosition!]!
     codes: [InviteCode!]!
@@ -110,7 +102,6 @@ type RootQuery {
 type RootMutation {
     login(email: String!, password: String!): AuthData!
     reg(userInput: UserInput): User
-    createEvent(eventInput: EventInput): Event
     createDdArticle(dDArticleInput: DDArticleInput): DDArticle
     updateDdArticle(dDArticleInput: DDArticleInput): DDArticle
     removeDdArticle(artId: String!): DDArticle

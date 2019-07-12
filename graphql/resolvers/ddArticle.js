@@ -5,12 +5,26 @@ module.exports = {
     // if (!req.isAuth) {
     //   throw new Error("Unauthenticated!");
     // }
-    try {
-      const arts = await DDArticle.find().sort({
-        date: -1
-      });
-      // console.log("dd arts", arts);
+    console.log("arts args", args);
+    const { page = 1, limit = 10, ...rest } = args;
+    const filter = {};
+    if (rest.title) {
+      filter.title = { $regex: rest.title, $options: "i" };
+    }
+    if (rest.type) {
+      filter.type = { $eq: Number(rest.type) };
+    }
+    console.log("filter", filter);
 
+    try {
+      const result = await DDArticle.paginate(filter, { page, limit });
+      console.log("dd result", result);
+      return {
+        list: result.docs,
+        currPage: result.page,
+        pageSize: limit,
+        total: result.totalDocs
+      };
       return arts.sort((x, y) => {
         return x.isTop === y.isTop ? 0 : x.isTop ? -1 : 1;
       });
@@ -20,7 +34,7 @@ module.exports = {
   },
   getDdArticle: async (args, req) => {
     const { artId } = args;
-    console.log("art input", args);
+    // console.log("art input", args);
 
     try {
       const art = await DDArticle.findById(artId);
@@ -45,7 +59,7 @@ module.exports = {
     console.log("art input", args);
     try {
       const result = await DDArticle.findByIdAndUpdate(id, rest);
-      console.log("art update result", result);
+      // console.log("art update result", result);
 
       // createArticle = transformEvent(result);
       // return createArticle;

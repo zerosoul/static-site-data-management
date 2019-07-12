@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const Schema = mongoose.Schema;
 
-const eventSchema = new Schema(
+const articleSchema = new Schema(
   {
     title: {
       type: String,
@@ -22,7 +23,8 @@ const eventSchema = new Schema(
     },
     link: {
       type: String,
-      required: true
+      default: "",
+      required: false
     },
     date: {
       type: Date,
@@ -45,5 +47,6 @@ const eventSchema = new Schema(
   },
   { timestamps: true }
 );
+articleSchema.plugin(mongoosePaginate);
 
-module.exports = mongoose.model("DDArticle", eventSchema);
+module.exports = mongoose.model("DDArticle", articleSchema);

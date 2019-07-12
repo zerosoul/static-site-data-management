@@ -81,7 +81,13 @@ function beforeUpload(file) {
   return false;
 }
 let Editor = null;
-const EditForm = ({ form, handleModalVisible, id = null, article }) => {
+const EditForm = ({
+  form,
+  retriveValues,
+  handleModalVisible,
+  id = null,
+  article
+}) => {
   const [imgUrl, setImgUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [editorContent, setEditorContent] = useState("");
@@ -187,7 +193,8 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
   return (
     <Mutation
       mutation={artId ? UpdateDdArticle : InsertDdArticle}
-      refetchQueries={result => [{ query: ListQuery }]}
+      refetchQueries={[{ query: ListQuery, variables: retriveValues }]}
+      awaitRefetchQueries={true}
       fetchPolicy="no-cache"
     >
       {(editArticle, { loading, data, error }) => {
@@ -334,7 +341,7 @@ const EditForm = ({ form, handleModalVisible, id = null, article }) => {
   );
 };
 const HOCForm = Form.create({ name: "ddarticle" })(EditForm);
-const FormModal = ({ handleModalVisible, id }) => (
+const FormModal = ({ handleModalVisible, id, retriveValues }) => (
   <Query
     query={GetDdArticle}
     fetchPolicy="network-only"
@@ -360,6 +367,7 @@ const FormModal = ({ handleModalVisible, id }) => (
           <Spin spinning={loading}>
             <HOCForm
               article={getDdArticle}
+              retriveValues={retriveValues}
               handleModalVisible={handleModalVisible}
               id={id}
             />

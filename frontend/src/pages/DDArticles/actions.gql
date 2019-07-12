@@ -1,13 +1,18 @@
-query ListQuery {
-  ddArticles {
-    _id
-    title
-    description
-    link
-    date
-    thumbnail
-    isTop
-    type
+query ListQuery($page: Int, $limit: Int, $title: String, $type: String) {
+  ddArticles(page: $page, limit: $limit, title: $title, type: $type) {
+    list {
+      _id
+      title
+      description
+      link
+      date
+      thumbnail
+      isTop
+      type
+    }
+    pageSize
+    currPage
+    total
   }
 }
 query GetDdArticle($artId: String!) {
@@ -60,7 +65,7 @@ mutation InsertDdArticle(
   $title: String!
   $description: String!
   $content: String
-  $link: String!
+  $link: String
   $date: String!
   $thumbnail: String!
 ) {

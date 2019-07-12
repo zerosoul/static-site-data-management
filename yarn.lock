@@ -752,10 +752,10 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   resolved "https://registry.npm.taobao.org/graceful-fs/download/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha1-/7cD4QZuig7qpMi4C6klPu77+wA=
 
-graphql@^14.3.1:
-  version "14.3.1"
-  resolved "https://registry.npm.taobao.org/graphql/download/graphql-14.3.1.tgz#b3aa50e61a841ada3c1f9ccda101c483f8e8c807"
-  integrity sha1-s6pQ5hqEGto8H5zNoQHEg/joyAc=
+graphql@^14.4.1:
+  version "14.4.2"
+  resolved "https://registry.npm.taobao.org/graphql/download/graphql-14.4.2.tgz#553a7d546d524663eda49ed6df77577be3203ae3"
+  integrity sha1-VTp9VG1SRmPtpJ7W33dXe+MgOuM=
   dependencies:
     iterall "^1.2.2"
 
@@ -1335,10 +1335,15 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.npm.taobao.org/mongoose-legacy-pluralize/download/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha1-O6n5H6UHtRhtOZ+0CFS/8Y+1Y+Q=
 
-mongoose@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.npm.taobao.org/mongoose/download/mongoose-5.6.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmongoose%2Fdownload%2Fmongoose-5.6.0.tgz#6c3984d2330bc3b28ae800d8b8025a0686d1e450"
-  integrity sha1-bDmE0jMLw7KK6ADYuAJaBobR5FA=
+mongoose-paginate-v2@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.npm.taobao.org/mongoose-paginate-v2/download/mongoose-paginate-v2-1.3.0.tgz#3bf5c0bde89100e55ac0249db44a5559fa08c423"
+  integrity sha1-O/XAveiRAOVawCSdtEpVWfoIxCM=
+
+mongoose@^5.6.2:
+  version "5.6.4"
+  resolved "https://registry.npm.taobao.org/mongoose/download/mongoose-5.6.4.tgz?cache=0&sync_timestamp=1562636245196&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmongoose%2Fdownload%2Fmongoose-5.6.4.tgz#049ca8ad5ac16a528c23a20301579f7ac92fdb0e"
+  integrity sha1-BJyorVrBalKMI6IDAVefeskv2w4=
   dependencies:
     async "2.6.2"
     bson "~1.1.1"
