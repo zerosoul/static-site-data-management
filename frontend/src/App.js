@@ -112,7 +112,6 @@ class App extends Component {
           <div className="btns">
             <StyledBtn
               ghost
-              href={isLogin ? null : "/login"}
               icon="poweroff"
               onClick={isLogin ? this.handleLogout : null}
             >
@@ -146,7 +145,7 @@ class App extends Component {
             </Switch>
           </Suspense>
         </Content>
-        <Footer>footer</Footer>
+        <Footer>网站数据录入平台 @ {new Date().getFullYear()}</Footer>
       </Layout>
     );
   }

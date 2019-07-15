@@ -139,7 +139,10 @@ export default function List({ handleModalVisible }) {
             pagination={{
               size: "small",
               pageSize: 10,
-              total: data.DdPositions && data.DdPositions.length
+              total: data.DdPositions && data.DdPositions.length,
+              showTotal: total => {
+                return `共${total}条`;
+              }
             }}
           />
         );

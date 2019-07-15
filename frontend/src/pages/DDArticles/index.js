@@ -6,7 +6,7 @@ import ArtForm from "./formModal";
 export default function DDArticles() {
   const [modalVisible, setModalVisible] = useState(false);
   const [currId, setCurrId] = useState(null);
-  const [retriveValues, setRetriveValues] = useState({});
+  const [retriveValues, setRetriveValues] = useState({ page: 1 });
   const handleModalVisible = (visible = true, currId = null) => {
     setModalVisible(visible);
     setCurrId(currId);
@@ -21,12 +21,7 @@ export default function DDArticles() {
         />
       )}
       <Row type="flex" align="middle" justify="space-between">
-        <Search
-          resetRetriveValues={() => {
-            setRetriveValues({});
-          }}
-          updateRetriveValues={setRetriveValues}
-        />
+        <Search updateRetriveValues={setRetriveValues} />
         <Button
           type="primary"
           onClick={() => {
@@ -40,6 +35,7 @@ export default function DDArticles() {
       <Divider />
       <List
         handleModalVisible={handleModalVisible}
+        updateRetriveValues={setRetriveValues}
         retriveValues={retriveValues}
       />
     </>

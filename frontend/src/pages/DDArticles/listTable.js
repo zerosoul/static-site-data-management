@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Query, Mutation } from "react-apollo";
 import {
   Table,
@@ -23,7 +23,13 @@ const VerticalCell = styled.div`
     margin-top: 0.4rem;
   }
 `;
-export default function List({ handleModalVisible, retriveValues }) {
+export default function List({
+  handleModalVisible,
+  retriveValues,
+  updateRetriveValues
+}) {
+  // const [currPage, setCurrPage] = useState(1);
+  const { page: currPage } = retriveValues;
   const columns = [
     {
       title: "标题",
@@ -42,21 +48,22 @@ export default function List({ handleModalVisible, retriveValues }) {
       dataIndex: "thumbnail",
       key: "thumbnail",
       width: 220,
-      render: (img, { link }) => (
-        <Tooltip placement="top" title={link}>
+      render: (img, { link }) =>
+        // <Tooltip placement="top" title={link}>
+
+        img ? (
           <a
             href={link}
             target="_blank"
             style={{ display: "inline-block", verticalAlign: "middle" }}
           >
-            {img ? (
-              <img style={{ maxWidth: "8rem" }} src={img} alt="缩略图" />
-            ) : (
-              <span>暂无缩略图</span>
-            )}
+            <img style={{ maxWidth: "8rem" }} src={img} alt={link} />
           </a>
-        </Tooltip>
-      )
+        ) : (
+          <span>暂无缩略图</span>
+        )
+
+      // </Tooltip>
     },
     {
       title: "类型/发表时间",
@@ -183,24 +190,18 @@ export default function List({ handleModalVisible, retriveValues }) {
             dataSource={data.ddArticles && data.ddArticles.list}
             loading={loading}
             pagination={{
+              current: currPage,
               onChange: page => {
                 console.log("page change", page);
-                fetchMore({
-                  variables: {
-                    ...retriveValues,
-                    page,
-                    limit: 10
-                  },
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) return prev;
-                    return fetchMoreResult;
-                  }
-                });
+                updateRetriveValues({ ...retriveValues, page });
               },
 
               size: "small",
               pageSize: 10,
-              total: data.ddArticles && data.ddArticles.total
+              total: data.ddArticles && data.ddArticles.total,
+              showTotal: total => {
+                return `共${total}条`;
+              }
             }}
           />
         );

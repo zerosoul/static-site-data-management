@@ -18,7 +18,7 @@ class FormItems extends React.Component {
     });
   };
   render() {
-    const { form, resetRetriveValues } = this.props;
+    const { form, updateRetriveValues } = this.props;
 
     return (
       <Form layout="inline" onSubmit={this.handleFormSubmit}>
@@ -44,7 +44,7 @@ class FormItems extends React.Component {
             icon="sync"
             onClick={() => {
               form.resetFields();
-              resetRetriveValues();
+              updateRetriveValues({ page: 1 });
             }}
           >
             重置
