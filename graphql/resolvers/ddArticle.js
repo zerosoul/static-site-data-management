@@ -17,7 +17,14 @@ module.exports = {
     console.log("filter", filter);
 
     try {
-      const result = await DDArticle.paginate(filter, { page, limit });
+      const result = await DDArticle.paginate(filter, {
+        page,
+        limit,
+        sort: {
+          isTop: -1,
+          date: -1
+        }
+      });
       console.log("dd result", result);
       return {
         list: result.docs,
@@ -25,9 +32,6 @@ module.exports = {
         pageSize: limit,
         total: result.totalDocs
       };
-      return arts.sort((x, y) => {
-        return x.isTop === y.isTop ? 0 : x.isTop ? -1 : 1;
-      });
     } catch (err) {
       throw err;
     }
