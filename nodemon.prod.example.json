@@ -1,0 +1,9 @@
+{
+  "env": {
+    "MONGO_USER": "user",
+    "MONGO_PASSWORD": "password",
+    "MONGO_DB": "db_name",
+    "MONGO_HOST": "121.196.203.666",
+    "MONGO_PORT": 21073
+  }
+}

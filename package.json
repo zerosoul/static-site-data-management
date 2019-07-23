@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --ignore 'frontend/*' app.js"
+    "start": "NODE_ENV=development nodemon --ignore 'frontend/*' app.js",
+    "start:prod": "NODE_ENV=production nodemon --ignore 'frontend/*' app.js"
   },
-  "author": "",
+  "author": "tristan",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

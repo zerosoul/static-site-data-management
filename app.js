@@ -31,14 +31,23 @@ app.use(
     graphiql: true
   })
 );
-// const mdb_conn_str = `mongodb+srv://${process.env.MONGO_USER}:${
-//   process.env.MONGO_PASSWORD
-// }@cluster-yanggc-v65dk.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`;
-const mdb_conn_str = `mongodb://114.242.25.9:27117/test`;
-console.info("conn str", mdb_conn_str);
+let db_conn_str = "";
+let account = {};
+if (process.env.NODE_ENV === "production") {
+  db_conn_str = `mongodb://114.242.25.9:27117/test`;
+} else {
+  db_conn_str = `mongodb://${process.env.MONGO_HOST}:${
+    process.env.MONGO_PORT
+  }/${process.env.MONGO_DB}?authSource=admin`;
+  account.user = process.env.MONGO_USER;
+  account.pass = process.env.MONGO_PASSWORD;
+}
+
+console.info("conn str", db_conn_str);
 mongoose
-  .connect(mdb_conn_str, {
-    useNewUrlParser: true
+  .connect(db_conn_str, {
+    useNewUrlParser: true,
+    ...account
   })
   .then(() => {
     console.info("db connected!");
