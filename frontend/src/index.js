@@ -32,7 +32,7 @@ const authLink = setContext((_, { headers }) => {
 const API =
   process.env.NODE_ENV === "development"
     ? "http://localhost:8001/graphql"
-    : "http://ssde.yangerxiao.com/graphql";
+    : "https://ssde.yangerxiao.com/graphql";
 const client = new ApolloClient({
   // By default, this client will send queries to the
   //  `/graphql` endpoint on the same host
