@@ -68,6 +68,8 @@ mutation InsertDdArticle(
   $link: String
   $date: String!
   $thumbnail: String!
+  $isTop: Boolean
+  $type: Int
 ) {
   createDdArticle(
     dDArticleInput: {
@@ -77,6 +79,8 @@ mutation InsertDdArticle(
       link: $link
       date: $date
       thumbnail: $thumbnail
+      isTop: $isTop
+      type: $type
     }
   ) {
     title
