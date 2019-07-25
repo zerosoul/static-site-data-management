@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "NODE_ENV=development nodemon --config 'nodemon.dev.json' --ignore 'frontend/*' app.js",
-    "start:prod": "NODE_ENV=production nodemon --config 'nodemon.prod.json' --ignore 'frontend/*' app.js"
+    "start:prod": "NODE_ENV=production nodemon --ignore 'frontend/*' app.js"
   },
   "author": "tristan",
   "license": "ISC",
