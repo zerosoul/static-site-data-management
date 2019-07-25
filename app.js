@@ -34,7 +34,9 @@ app.use(
 let db_conn_str = "";
 let account = {};
 if (process.env.NODE_ENV === "production") {
-  db_conn_str = `mongodb://114.242.25.9:27117/test`;
+  db_conn_str = `mongodb://${process.env.MONGO_HOST}:${
+    process.env.MONGO_PORT
+  }/${process.env.MONGO_DB}`;
 } else {
   db_conn_str = `mongodb://${process.env.MONGO_HOST}:${
     process.env.MONGO_PORT
