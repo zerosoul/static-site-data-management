@@ -3,9 +3,9 @@ import { Route, Redirect, Switch, Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 
-import { Layout, Menu, Icon, Divider, Button, Skeleton } from "antd";
+import { Layout, Menu, Button, Skeleton } from "antd";
 
-const { Header, Sider, Content, Footer } = Layout;
+const { Header, Content, Footer } = Layout;
 const { SubMenu } = Menu;
 const Home = lazy(() => import("./pages/Home"));
 const DDArticles = lazy(() => import("./pages/DDArticles"));
@@ -82,7 +82,6 @@ class App extends Component {
     return (
       <Layout>
         <StyledHeader>
-          {/* <div className="logo" /> */}
           {isLogin && (
             <Menu
               selectedKeys={[pathName]}

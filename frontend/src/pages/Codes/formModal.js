@@ -1,15 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import { Mutation, Query } from "react-apollo";
-import moment from "moment";
 
 import {
   Form,
   Input,
   Button,
   Modal,
-  Icon,
-  message,
-  DatePicker,
   Row,
   Col,
   Divider,
@@ -60,8 +56,7 @@ const EditForm = ({ form, handleModalVisible, id = null, code }) => {
           data.id = codeId;
         }
         console.info("form values", data);
-        // return;
-        const rep = await editCode({
+        await editCode({
           variables: data
         });
       }

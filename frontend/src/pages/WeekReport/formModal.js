@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Mutation, Query } from "react-apollo";
 import moment from "moment";
 import {
@@ -47,7 +47,7 @@ const EditForm = ({ form, handleModalVisible, id = null, Position }) => {
           data.id = posId;
         }
         console.info("form values", title, cate, link, updateTime, depart);
-        const rep = await editPosition({
+        await editPosition({
           variables: data
         });
       }
@@ -59,7 +59,7 @@ const EditForm = ({ form, handleModalVisible, id = null, Position }) => {
   return (
     <Mutation
       mutation={posId ? UpdateDdPosition : InsertDdPosition}
-      refetchQueries={result => [{ query: ListQuery }]}
+      refetchQueries={() => [{ query: ListQuery }]}
     >
       {(editPosition, { loading, data, error }) => {
         if (error) return "error";

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Query, Mutation } from "react-apollo";
 import { Table, Button, message, Popconfirm } from "antd";
 import moment from "moment";
@@ -12,7 +12,7 @@ const StyledLink = styled.a`
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
-export default function List({ handleModalVisible }) {
+const List = ({ handleModalVisible }) => {
   const columns = [
     {
       title: "职位名称",
@@ -146,4 +146,5 @@ export default function List({ handleModalVisible }) {
       }}
     </Query>
   );
-}
+};
+export default List;

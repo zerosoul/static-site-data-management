@@ -3,7 +3,6 @@ const path = require("path");
 const webpack = require("webpack");
 // const resolve = require("resolve");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const AutoDllPlugin = require("autodll-webpack-plugin");
 
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");

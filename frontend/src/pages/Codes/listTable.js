@@ -1,28 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Query, Mutation } from "react-apollo";
-import {
-  Table,
-  Button,
-  message,
-  Popconfirm,
-  Tag,
-  Tooltip,
-  Badge,
-  Row,
-  Col
-} from "antd";
-import moment from "moment";
-import styled from "styled-components";
-import { ListQuery, RemoveCode, UpdateCode } from "./actions.gql";
+import { Table, Button, message, Popconfirm } from "antd";
+import { ListQuery, RemoveCode } from "./actions.gql";
 
-const VerticalCell = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  > span {
-    margin-top: 0.4rem;
-  }
-`;
 export default function List({ handleModalVisible }) {
   const columns = [
     {
@@ -70,7 +50,7 @@ export default function List({ handleModalVisible }) {
             </Button>
             <Mutation
               mutation={RemoveCode}
-              refetchQueries={result => {
+              refetchQueries={() => {
                 return [{ query: ListQuery }];
               }}
             >
@@ -86,7 +66,7 @@ export default function List({ handleModalVisible }) {
                     okText="确定"
                     cancelText="取消"
                     onConfirm={async () => {
-                      const resp = await removeCode({
+                      await removeCode({
                         variables: { codeId: _id }
                       });
                     }}

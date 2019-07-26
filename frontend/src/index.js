@@ -14,8 +14,7 @@ import "moment/locale/zh-cn";
 
 moment.locale("zh-cn");
 import GloableStyle from "./GloableStyle";
-import "@babel/polyfill";
-console.log(process.env.NODE_ENV);
+console.log("env", process.env);
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists

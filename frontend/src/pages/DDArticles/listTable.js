@@ -1,16 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Query, Mutation } from "react-apollo";
-import {
-  Table,
-  Button,
-  message,
-  Popconfirm,
-  Tag,
-  Tooltip,
-  Badge,
-  Row,
-  Col
-} from "antd";
+import { Table, Button, message, Popconfirm, Tag, Badge } from "antd";
 import moment from "moment";
 import styled from "styled-components";
 import { ListQuery, RemoveDdArticle, UpdateDdArticle } from "./actions.gql";
@@ -177,7 +167,7 @@ export default function List({
       variables={{ ...retriveValues }}
       notifyOnNetworkStatusChange={true}
     >
-      {({ loading, error, data = {}, networkStatus, fetchMore }) => {
+      {({ loading, error, data = {}, networkStatus }) => {
         if (error) return `Error! ${error.message}`;
         console.log("table loading", loading, networkStatus);
 

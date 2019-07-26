@@ -28,7 +28,7 @@ const RegPage = ({ form, history }) => {
   useEffect(() => {
     console.log("err msg", errMsg);
 
-    if (!!errMsg) {
+    if (errMsg) {
       console.log("err msg warn", errMsg);
       message.warning(errMsg);
       // .then(() => {
@@ -50,7 +50,6 @@ const RegPage = ({ form, history }) => {
         }
         if (data && data.reg) {
           console.log("reg data", data);
-          const { email } = data.reg || {};
           history.push("/login");
         }
         return (
