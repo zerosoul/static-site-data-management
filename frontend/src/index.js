@@ -1,6 +1,8 @@
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
 
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import { ApolloClient } from "apollo-client";
 import { HttpLink } from "apollo-link-http";
 import { setContext } from "apollo-link-context";
