@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Mutation, Query } from "react-apollo";
 import moment from "moment";
-import E from "wangeditor";
+import Editor from "../../components/Editor";
+import UploadImage from "../../components/UploadImage";
 
-import imageCompression from "browser-image-compression";
 import {
   Form,
   Input,
@@ -44,42 +44,6 @@ const ThinColLayout = {
 
 const { Item } = Form;
 const { Option } = Select;
-function getBase64(img) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(img);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
-const compress = async (image, opts = {}) => {
-  let options = {
-    maxSizeMB: 0.05,
-    maxWidthOrHeight: 300,
-    useWebWorker: true,
-    ...opts
-  };
-  try {
-    const compressedFile = await imageCompression(image, options);
-    console.log(
-      "compressedFile instanceof Blob",
-      compressedFile instanceof Blob
-    ); // true
-    console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
-    return compressedFile;
-    // await uploadToServer(compressedFile); // write your own logic
-  } catch (error) {
-    console.log(error);
-  }
-};
-function beforeUpload(file) {
-  // const isLt50K = file.size / 1024 < 50;
-  // if (!isLt50K) {
-  //   message.error("缩略图要小于50K");
-  // }
-  return false;
-}
-let Editor = null;
 const EditForm = ({
   form,
   retriveValues,
@@ -88,10 +52,8 @@ const EditForm = ({
   article
 }) => {
   const [imgUrl, setImgUrl] = useState(null);
-  const [uploading, setUploading] = useState(false);
   const [editorContent, setEditorContent] = useState("");
-  const editor = useRef(null);
-  console.log("form id", id);
+  // console.log("form id", id);
   const artId = id;
   const submitHandler = (e, editArticle) => {
     e.preventDefault();
@@ -126,10 +88,10 @@ const EditForm = ({
           isTop
         };
         if (artId) {
-          console.log("form submit id", artId);
+          // console.log("form submit id", artId);
           data.id = artId;
         }
-        console.info("form values", data);
+        // console.info("form values", data);
         // return;
         const rep = await editArticle({
           variables: data
@@ -138,57 +100,8 @@ const EditForm = ({
     });
   };
   const { getFieldDecorator } = form;
-  console.log("handleModalVisible", handleModalVisible);
-  const uploadButton = (
-    <div>
-      <Icon type={uploading ? "loading" : "plus"} />
-      <div className="ant-upload-text">上传</div>
-    </div>
-  );
+  // console.log("handleModalVisible", handleModalVisible);
 
-  const handleChange = async info => {
-    console.log("info", info);
-    const [file] = info.fileList;
-    console.log("file info", file);
-    // return;
-    if (file) {
-      // Get this url from response in real world.
-      const compressedFile = await compress(file.originFileObj);
-      const imageUrl = await getBase64(compressedFile);
-      setImgUrl(imageUrl);
-      setUploading(false);
-    }
-  };
-  useEffect(() => {
-    const elem = editor.current;
-    Editor = new E(elem);
-    // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
-    Editor.customConfig.onchange = html => {
-      setEditorContent(html);
-    };
-    // Editor.customConfig.uploadImgShowBase64 = true;
-    Editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
-    Editor.customConfig.customUploadImg = async (files, insert) => {
-      // files 是 input 中选中的文件列表
-      // insert 是获取图片 url 后，插入到编辑器的方法
-      console.log("image", files);
-      const compressedFile = await compress(files[0], {
-        maxSizeMB: 3,
-        maxWidthOrHeight: 600
-      });
-      const imgUrl = await getBase64(compressedFile);
-      // return;
-      // 上传代码返回结果之后，将图片插入到编辑器中
-      insert(imgUrl);
-    };
-    Editor.create();
-  }, []);
-  useEffect(() => {
-    if (Editor) {
-      Editor.txt.html(article.content);
-    }
-    setEditorContent(article.content);
-  }, [article.content]);
   return (
     <Mutation
       mutation={artId ? UpdateDdArticle : InsertDdArticle}
@@ -199,7 +112,6 @@ const EditForm = ({
       {(editArticle, { loading, data, error }) => {
         if (error) return "error";
         if (data) {
-          console.log(data);
           handleModalVisible(false);
         }
         return (
@@ -272,25 +184,10 @@ const EditForm = ({
                     rules: [],
                     initialValue: article.thumbnail
                   })(
-                    <Upload
-                      accept="image/jpg,image/png"
-                      listType="picture-card"
-                      className="avatar-uploader"
-                      showUploadList={false}
-                      action={handleChange}
-                      beforeUpload={beforeUpload}
-                      onChange={handleChange}
-                    >
-                      {imgUrl || article.thumbnail ? (
-                        <img
-                          src={imgUrl || article.thumbnail}
-                          style={{ width: "100%" }}
-                          alt="avatar"
-                        />
-                      ) : (
-                        uploadButton
-                      )}
-                    </Upload>
+                    <UploadImage
+                      imgUrl={imgUrl || article.thumbnail}
+                      setImgUrl={setImgUrl}
+                    />
                   )}
                 </Item>
               </Col>
@@ -320,7 +217,10 @@ const EditForm = ({
             <Divider />
             <Row>
               <Col span={24}>
-                <div ref={editor} />
+                <Editor
+                  setEditorContent={setEditorContent}
+                  currContent={editorContent}
+                />
               </Col>
             </Row>
             <Divider />
@@ -349,7 +249,6 @@ const FormModal = ({ handleModalVisible, id, retriveValues }) => (
   >
     {({ data = {}, loading, error }) => {
       if (error) return "error";
-      console.log("wtf", loading);
 
       const { getDdArticle = {} } = data;
       return (
