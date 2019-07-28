@@ -52,7 +52,7 @@ const EditForm = ({
   article
 }) => {
   const [imgUrl, setImgUrl] = useState(null);
-  const [editorContent, setEditorContent] = useState("");
+  // const [editorContent, setEditorContent] = useState("");
   // console.log("form id", id);
   const artId = id;
   const submitHandler = (e, editArticle) => {
@@ -76,7 +76,6 @@ const EditForm = ({
         thumbnail = imgUrl || thumbnail || "";
         type = Number(type);
         date = moment(date).format("YYYY-MM-DD HH:mm:ss");
-        content = editorContent;
         const data = {
           title,
           description,
@@ -217,10 +216,10 @@ const EditForm = ({
             <Divider />
             <Row>
               <Col span={24}>
-                <Editor
-                  setEditorContent={setEditorContent}
-                  currContent={editorContent}
-                />
+                {getFieldDecorator("content", {
+                  rules: [],
+                  initialValue: article.content
+                })(<Editor />)}
               </Col>
             </Row>
             <Divider />
