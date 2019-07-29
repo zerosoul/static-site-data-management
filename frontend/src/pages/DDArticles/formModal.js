@@ -9,8 +9,6 @@ import {
   Input,
   Button,
   Modal,
-  Upload,
-  Icon,
   DatePicker,
   Row,
   Col,
@@ -92,7 +90,7 @@ const EditForm = ({
         }
         // console.info("form values", data);
         // return;
-        const rep = await editArticle({
+        await editArticle({
           variables: data
         });
       }

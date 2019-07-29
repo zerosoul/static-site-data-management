@@ -95,7 +95,7 @@ const UploadImage = (props, ref) => {
   return (
     <Upload
       ref={ref}
-      accept="image/jpg,image/png"
+      accept="image/jpg,image/png,image/gif"
       listType="picture"
       className="avatar-uploader"
       showUploadList={false}

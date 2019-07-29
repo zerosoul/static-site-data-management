@@ -1,5 +1,9 @@
 import imageCompression from "browser-image-compression";
 export const compressImage = async (image, opts = {}) => {
+  // gif图片不压缩
+  if (image.type == "image/gif") {
+    return image;
+  }
   let options = {
     maxSizeMB: 0.5,
     maxWidthOrHeight: 300,
@@ -20,18 +24,27 @@ export const compressImage = async (image, opts = {}) => {
   }
 };
 export function uploadImage(img) {
+  console.log("blob type", img.type, img.size);
+  let [imgType] = (img.type || "image/png").split("/").slice(-1);
+  // return;
   const formData = new FormData();
-  formData.append("smfile", img);
-  // formData.append(
-  //   "filename",
-  //   `${Math.random()
-  //     .toString(36)
-  //     .substring(4)}`
-  // );
+  formData.append(
+    "file",
+    img,
+    `${Math.random()
+      .toString(36)
+      .substring(4)}.${imgType}`
+  );
+  formData.append(
+    "name",
+    `${Math.random()
+      .toString(36)
+      .substring(4)}`
+  );
   console.log(formData);
 
   return new Promise((resolve, reject) => {
-    fetch(`https://sm.ms/api/upload`, {
+    fetch(`https://wechat.1d1d100.com/base/uploadimg`, {
       method: "POST",
       // headers: { "Content-Type": "multipart/form-data" },
       body: formData
@@ -39,8 +52,8 @@ export function uploadImage(img) {
       .then(response => response.json())
       .then(resp => {
         console.log("data", resp);
-        if (resp.code == "success") {
-          resolve(resp.data.url);
+        if (resp.code == 200) {
+          resolve(resp.src.replace("http:", ""));
         } else {
           resolve("");
         }
