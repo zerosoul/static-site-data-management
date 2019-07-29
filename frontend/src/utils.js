@@ -1,4 +1,6 @@
 import imageCompression from "browser-image-compression";
+
+const UploadAPI = process.env.REACT_APP_IMG_UPLOAD_API;
 export const compressImage = async (image, opts = {}) => {
   // gif图片不压缩
   if (image.type == "image/gif") {
@@ -25,8 +27,11 @@ export const compressImage = async (image, opts = {}) => {
 };
 export function uploadImage(img) {
   console.log("blob type", img.type, img.size);
+  if (!UploadAPI) {
+    alert("未配置图片上传API");
+    return;
+  }
   let [imgType] = (img.type || "image/png").split("/").slice(-1);
-  // return;
   const formData = new FormData();
   formData.append(
     "file",
@@ -41,12 +46,9 @@ export function uploadImage(img) {
       .toString(36)
       .substring(4)}`
   );
-  console.log(formData);
-
   return new Promise((resolve, reject) => {
-    fetch(`https://wechat.1d1d100.com/base/uploadimg`, {
+    fetch(`${UploadAPI}`, {
       method: "POST",
-      // headers: { "Content-Type": "multipart/form-data" },
       body: formData
     })
       .then(response => response.json())
