@@ -3,6 +3,9 @@ import { createGlobalStyle } from "styled-components";
 
 const GloableStyle = createGlobalStyle`
  ${reset}
+  table, caption, tbody, tfoot, thead, tr, th, td{
+   vertical-align:middle;
+ }
  html{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Query, Mutation } from "react-apollo";
-import { Table, Button, message, Popconfirm, Tag, Badge } from "antd";
+import { Table, Button, message, Popconfirm, Tag, Badge, Icon } from "antd";
 import moment from "moment";
 import styled from "styled-components";
 import { ListQuery, RemoveDdArticle, UpdateDdArticle } from "./actions.gql";
@@ -11,6 +11,22 @@ const VerticalCell = styled.div`
   align-items: flex-start;
   > span {
     margin-top: 0.4rem;
+  }
+`;
+const Thumbnail = styled.a`
+  position: relative;
+  display: inline-block;
+  .linkIco {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(55, 57, 58, 0.8);
+    padding: 0.2rem;
+  }
+  > img {
+    max-width: 8rem;
+    display: inline-block;
+    vertical-align: middle;
   }
 `;
 export default function List({
@@ -39,21 +55,14 @@ export default function List({
       key: "thumbnail",
       width: 220,
       render: (img, { link }) =>
-        // <Tooltip placement="top" title={link}>
-
         img ? (
-          <a
-            href={link}
-            target="_blank"
-            style={{ display: "inline-block", verticalAlign: "middle" }}
-          >
-            <img style={{ maxWidth: "8rem" }} src={img} alt={link} />
-          </a>
+          <Thumbnail href={link || "javascript:void()"} target="_blank">
+            {link && <Icon className="linkIco" type="link" />}
+            <img src={img} alt={link} />
+          </Thumbnail>
         ) : (
           <span>暂无缩略图</span>
         )
-
-      // </Tooltip>
     },
     {
       title: "类型/发表时间",
