@@ -125,6 +125,7 @@ class App extends Component {
           </div>
         </StyledHeader>
         <Content
+          id="mainBlock"
           style={{
             margin: "24px 50px",
             padding: "20px",

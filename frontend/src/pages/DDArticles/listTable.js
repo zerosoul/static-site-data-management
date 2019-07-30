@@ -34,7 +34,6 @@ export default function List({
   retriveValues,
   updateRetriveValues
 }) {
-  // const [currPage, setCurrPage] = useState(1);
   const { page: currPage } = retriveValues;
   const columns = [
     {
@@ -193,6 +192,9 @@ export default function List({
               onChange: page => {
                 console.log("page change", page);
                 updateRetriveValues({ ...retriveValues, page });
+                document
+                  .querySelector("#mainBlock")
+                  .scrollIntoView({ behavior: "smooth" });
               },
 
               size: "small",
