@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Mutation, Query } from "react-apollo";
 import moment from "moment";
+import FullscreenWrapper from "./editorFullscreen";
 import Editor from "../../components/Editor";
 import UploadImage from "../../components/UploadImage";
 
@@ -50,8 +51,6 @@ const EditForm = ({
   article
 }) => {
   const [imgUrl, setImgUrl] = useState(null);
-  // const [editorContent, setEditorContent] = useState("");
-  // console.log("form id", id);
   const artId = id;
   const submitHandler = (e, editArticle) => {
     e.preventDefault();
@@ -60,7 +59,6 @@ const EditForm = ({
       if (!err) {
         const tmp = new Date().toLocaleDateString();
         console.info("form values", values);
-        // return;
         let {
           title,
           description,
@@ -85,11 +83,8 @@ const EditForm = ({
           isTop
         };
         if (artId) {
-          // console.log("form submit id", artId);
           data.id = artId;
         }
-        // console.info("form values", data);
-        // return;
         await editArticle({
           variables: data
         });
@@ -97,8 +92,6 @@ const EditForm = ({
     });
   };
   const { getFieldDecorator } = form;
-  // console.log("handleModalVisible", handleModalVisible);
-
   return (
     <Mutation
       mutation={artId ? UpdateDdArticle : InsertDdArticle}
@@ -214,10 +207,12 @@ const EditForm = ({
             <Divider />
             <Row>
               <Col span={24}>
-                {getFieldDecorator("content", {
-                  rules: [],
-                  initialValue: article.content
-                })(<Editor />)}
+                <FullscreenWrapper>
+                  {getFieldDecorator("content", {
+                    rules: [],
+                    initialValue: article.content
+                  })(<Editor />)}
+                </FullscreenWrapper>
               </Col>
             </Row>
             <Divider />

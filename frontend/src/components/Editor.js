@@ -48,7 +48,7 @@ const Editor = ({ onChange, value = "" }, ref) => {
 
   return (
     <div ref={ref}>
-      <div ref={editor} />
+      <div className="editor" ref={editor} />
     </div>
   );
 };
