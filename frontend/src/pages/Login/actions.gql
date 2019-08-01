@@ -1,6 +1,12 @@
 mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
     userId
+    meta {
+      name
+      email
+      role
+      mobile
+    }
     token
     tokenExpiration
   }

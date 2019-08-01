@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init:packages": "yarn install && cd frontend && yarn install",
-    "start": "pm2 startOrRestart ecosystem.config.js && cd frontend && yarn start",
-    "start:prod": "pm2 startOrRestart ecosystem.config.js  --env=production"
+    "start:backend": "pm2 startOrRestart ecosystem.config.js --watch",
+    "start": "yarn start:backend && cd frontend && yarn start",
+    "start:prod": "pm2 startOrRestart ecosystem.config.js  --watch --env=production"
   },
   "author": "tristan",
   "license": "ISC",

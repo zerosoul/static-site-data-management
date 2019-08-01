@@ -29,11 +29,11 @@ module.exports = {
     try {
       const user = await User.findOne({ email: email });
       if (!user) {
-        throw new Error("账号名或密码不正确");
+        throw new Error("用户名或密码不正确");
       }
       const isEqual = await bcrypt.compare(password, user.password);
       if (!isEqual) {
-        throw new Error("账号名或密码不正确");
+        throw new Error("用户名或密码不正确");
       }
       const token = jwt.sign(
         { userId: user.id, email: user.email },
@@ -42,7 +42,17 @@ module.exports = {
           expiresIn: "1d"
         }
       );
-      return { userId: user.id, token, tokenExpiration: 1 };
+      return {
+        userId: user.id,
+        meta: {
+          name: user.name,
+          role: user.role,
+          email: user.email,
+          mobile: user.mobile
+        },
+        token,
+        tokenExpiration: 1
+      };
     } catch (error) {
       throw error;
     }

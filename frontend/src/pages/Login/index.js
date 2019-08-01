@@ -2,23 +2,23 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Button, Form, Input, message } from "antd";
 import { Mutation } from "react-apollo";
+import { Redirect } from "react-router-dom";
 import { Login } from "./actions.gql";
-import { isLogin } from "../../auth";
+import { isLogin, setLogin } from "../../auth";
 
 const StyledForm = styled.form`
-  margin: 0 auto;
+  margin: 100px auto;
   max-width: 15rem;
   border: 1px solid #ccc;
   padding: 1rem 2rem;
 `;
+const login = isLogin();
 const LoginPage = ({ form, location: { state = {} }, history }) => {
   console.log("state", state);
   const [errMsg, setErrMsg] = useState("");
+  const [isLogin, setIsLogin] = useState(login);
 
   const { from = "/" } = state;
-  if (isLogin()) {
-    history.push(from);
-  }
   const submitHandler = (e, login) => {
     e.preventDefault();
     form.validateFieldsAndScroll(async (err, values) => {
@@ -26,6 +26,7 @@ const LoginPage = ({ form, location: { state = {} }, history }) => {
         const { email, password } = values;
         const rep = await login({ variables: { email, password } });
         console.info(email, password, rep);
+        setIsLogin(true);
       }
     });
   };
@@ -36,7 +37,13 @@ const LoginPage = ({ form, location: { state = {} }, history }) => {
   }, [errMsg]);
 
   const { getFieldDecorator } = form;
-  return (
+  return isLogin ? (
+    <Redirect
+      to={{
+        pathname: from
+      }}
+    />
+  ) : (
     <Mutation mutation={Login}>
       {(Login, { loading, data, error }) => {
         if (error) {
@@ -46,13 +53,11 @@ const LoginPage = ({ form, location: { state = {} }, history }) => {
         }
         if (data) {
           console.log("login data", data);
-          const { token, userId, tokenExpiration } = data.login || {};
-          localStorage.setItem("TOKEN", token);
-          localStorage.setItem("USER_ID", userId);
-          localStorage.setItem("LOGIN_TS", new Date().getTime());
+          const resp = data.login || {};
+          setLogin(resp);
 
           history.push(from);
-          return null;
+          location.reload();
         }
         return (
           <StyledForm

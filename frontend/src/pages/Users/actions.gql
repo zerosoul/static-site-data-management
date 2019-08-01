@@ -1,0 +1,68 @@
+query ListQuery($page: Int, $limit: Int, $title: String, $role: Int) {
+  users(page: $page, limit: $limit, title: $title, role: $role) {
+    list {
+      _id
+      name
+      email
+      mobile
+      createdAt
+      role
+    }
+    pageSize
+    currPage
+    total
+  }
+}
+query GetUser($uid: String!) {
+  getUser(uid: $uid) {
+    name
+    email
+    mobile
+    role
+  }
+}
+mutation RemoveUser($uid: String!) {
+  removeUser(uid: $uid) {
+    name
+  }
+}
+mutation UpdateUser(
+  $id: String!
+  $name: String!
+  $email: String!
+  $mobile: String
+  $password: String!
+  $role: Int!
+) {
+  updateUser(
+    userInput: {
+      id: $id
+      name: $name
+      email: $email
+      mobile: $mobile
+      password: $password
+      role: $role
+    }
+  ) {
+    name
+  }
+}
+mutation InsertUser(
+  $name: String!
+  $email: String!
+  $mobile: String
+  $password: String!
+  $role: Int!
+) {
+  createUser(
+    userInput: {
+      name: $name
+      email: $email
+      mobile: $mobile
+      password: $password
+      role: $role
+    }
+  ) {
+    name
+  }
+}

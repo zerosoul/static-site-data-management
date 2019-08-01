@@ -1,5 +1,8 @@
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
+import { isLogin } from "./auth";
+const Login = lazy(() => import("./pages/Login"));
 
 import "core-js/stable";
 import "regenerator-runtime/runtime";
@@ -34,11 +37,6 @@ const API =
     ? process.env.REACT_APP_GPL_API_DEV
     : process.env.REACT_APP_GPL_API_PROD;
 const client = new ApolloClient({
-  // By default, this client will send queries to the
-  //  `/graphql` endpoint on the same host
-  // Pass the configuration option { uri: YOUR_GRAPHQL_API_URL } to the `HttpLink` to connect
-  // to a different host
-
   link: authLink.concat(new HttpLink({ uri: API })),
   cache: new InMemoryCache()
 });
@@ -62,7 +60,19 @@ ReactDOM.render(
               />
             }
           >
-            <App />
+            {isLogin() ? (
+              <App />
+            ) : (
+              <Switch>
+                <Route path="/login" exact component={Login} />
+                <Redirect
+                  to={{
+                    pathname: "/login",
+                    state: { from: location.pathname }
+                  }}
+                />
+              </Switch>
+            )}
           </Suspense>
         </LocaleProvider>
       </BrowserRouter>

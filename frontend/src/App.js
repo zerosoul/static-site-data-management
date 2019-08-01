@@ -3,7 +3,7 @@ import { Route, Redirect, Switch, Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 
-import { Layout, Menu, Button, Skeleton } from "antd";
+import { Layout, Menu, Skeleton, Button } from "antd";
 
 const { Header, Content, Footer } = Layout;
 const { SubMenu } = Menu;
@@ -12,9 +12,10 @@ const DDArticles = lazy(() => import("./pages/DDArticles"));
 const DDPositions = lazy(() => import("./pages/DDPositions"));
 const WeekReport = lazy(() => import("./pages/WeekReport"));
 const Codes = lazy(() => import("./pages/Codes"));
-const Login = lazy(() => import("./pages/Login"));
+const Users = lazy(() => import("./pages/Users"));
 const Reg = lazy(() => import("./pages/Reg"));
-import { updateExp, isLogin, logout } from "./auth";
+const Page404 = lazy(() => import("./pages/404"));
+import { updateExp, isLogin, isAdmin, logout } from "./auth";
 
 const StyledBtn = styled(Button)`
   margin-right: 1rem;
@@ -48,80 +49,65 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: false,
       pathName: "/"
     };
   }
   handleLogout = () => {
-    console.log("logou");
+    console.log("logout");
     logout();
-    this.setState({
-      isLogin: false
-    });
+    location.reload();
   };
   componentDidMount() {
     const { pathname } = this.props.location;
 
     this.setState({
-      isLogin: isLogin(),
       pathName: pathname
     });
     this.props.history.listen((location, action) => {
       // location is an object like window.location
       this.setState({
-        pathName: location.pathname,
-        isLogin: isLogin()
+        pathName: location.pathname
       });
       console.log("path changed", action, location.pathname, location.state);
     });
   }
   render() {
-    const { isLogin, pathName } = this.state;
-    console.log("path name", this.props);
+    const { pathName } = this.state;
+    console.log("isAdmin", this.props);
 
     return (
       <Layout>
         <StyledHeader>
-          {isLogin && (
-            <Menu
-              selectedKeys={[pathName]}
-              mode="horizontal"
-              theme="dark"
-              style={{ lineHeight: "64px" }}
-            >
-              <Menu.Item key={"/"}>
-                <Link to={"/"}>首页</Link>
+          <Menu
+            selectedKeys={[pathName]}
+            mode="horizontal"
+            theme="dark"
+            style={{ lineHeight: "64px" }}
+          >
+            <Menu.Item key={"/"}>
+              <Link to={"/"}>首页</Link>
+            </Menu.Item>
+            <SubMenu title={<span>站点数据</span>}>
+              <Menu.Item key={"/ddarticles"}>
+                <Link to={"/ddarticles"}>文章</Link>
               </Menu.Item>
-              <SubMenu title={<span>官网数据</span>}>
-                <Menu.Item key={"/ddarticles"}>
-                  <Link to={"/ddarticles"}>文章</Link>
-                </Menu.Item>
 
-                <Menu.Item key="/ddpositions">
-                  <Link to={"/ddpositions"}>职位</Link>
+              <Menu.Item key="/ddpositions">
+                <Link to={"/ddpositions"}>职位</Link>
+              </Menu.Item>
+            </SubMenu>
+            {isAdmin() && (
+              <SubMenu title={<span>系统管理</span>}>
+                <Menu.Item key={"/users"}>
+                  <Link to={"/users"}>用户管理</Link>
                 </Menu.Item>
               </SubMenu>
-              <SubMenu title={<span>周报</span>}>
-                <Menu.Item key={"/weekreport"}>
-                  <Link to={"/weekreport"}>写周报</Link>
-                </Menu.Item>
-              </SubMenu>
-            </Menu>
-          )}
-          <div className="btns">
-            <StyledBtn
-              ghost
-              icon="poweroff"
-              onClick={isLogin ? this.handleLogout : null}
-            >
-              {isLogin ? `退出` : <Link to="/login">登录</Link>}
-            </StyledBtn>
-
-            {!isLogin && (
-              <StyledBtn icon="user-add" ghost>
-                <Link to="/reg">注册</Link>
-              </StyledBtn>
             )}
+          </Menu>
+          <div className="btns">
+            <StyledBtn ghost icon="poweroff" onClick={this.handleLogout}>
+              退出
+            </StyledBtn>
           </div>
         </StyledHeader>
         <Content
@@ -135,13 +121,14 @@ class App extends Component {
         >
           <Suspense fallback={<Skeleton active />}>
             <Switch>
-              <Route path="/login" component={Login} />
               <Route path="/reg" component={Reg} />
               <AuthRoute path="/" exact component={Home} />
               <AuthRoute path="/codes" component={Codes} />
+              <AuthRoute path="/users" component={Users} />
               <AuthRoute path="/weekreport" component={WeekReport} />
               <AuthRoute path="/ddarticles" component={DDArticles} />
               <AuthRoute path="/ddpositions" component={DDPositions} />
+              <Route component={Page404} />
             </Switch>
           </Suspense>
         </Content>
@@ -152,4 +139,3 @@ class App extends Component {
 }
 
 export default withRouter(App);
-// export default App;

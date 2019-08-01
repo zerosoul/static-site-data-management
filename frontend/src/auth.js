@@ -2,13 +2,19 @@ const key_token = "TOKEN";
 const key_uid = "USER_ID";
 const key_login_ts = "LOGIN_TS";
 const key_te = "TOKEN_EXPI";
-export const login = ({ token, userId, tokenExp }) => {
+const key_meta = "META";
+export const setLogin = ({ token, userId, tokenExp, meta }) => {
   localStorage.setItem(key_token, token);
   localStorage.setItem(key_uid, userId);
   localStorage.setItem(key_te, tokenExp);
+  localStorage.setItem(key_meta, JSON.stringify(meta));
+  localStorage.setItem(key_login_ts, new Date().getTime());
 };
 export const logout = () => {
   localStorage.removeItem(key_token);
+};
+export const isAdmin = () => {
+  return JSON.parse(localStorage.getItem(key_meta) || "{}").role == 1;
 };
 export const getAuth = () => {
   return {

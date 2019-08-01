@@ -67,17 +67,30 @@ type User {
   _id: ID!
   name: String!
   email: String!
+  mobile: String
   password: String
+  role: Int
+  createdAt: String!
 }
 
 input UserInput {
+  id: String
   name: String
   email: String!
+  mobile: String
   password: String!
+  role: Int!
 }
-
+type UserInfoMeta{
+  name: String!
+  email: String!
+  mobile: String
+  role: Int!
+}
 type AuthData {
   userId: ID!
+  meta: UserInfoMeta
+  role: Int!
   token: String!
   tokenExpiration: Int!
 }
@@ -87,16 +100,21 @@ type DDArticleResult{
   pageSize:Int
   total:Int
 }
-
-
-
+type UserResult{
+  list:[User]
+  currPage:Int
+  pageSize:Int
+  total:Int
+}
 type RootQuery {
     ddArticles(page:Int,limit:Int,title: String,type: String): DDArticleResult
     getDdArticle(artId: String!): DDArticle
     ddPositions: [DDPosition!]!
+    getDdPosition(posId: String!): DDPosition
     codes: [InviteCode!]!
     getCode(codeId: String!): InviteCode
-    getDdPosition(posId: String!): DDPosition
+    users(page:Int,limit:Int,title: String,role: Int): UserResult
+    getUser(uid: String!): User
 }
   
 type RootMutation {
@@ -111,6 +129,9 @@ type RootMutation {
     removeCode(codeId: String!): InviteCode
     createCode(inviteCodeInput: InviteCodeInput): InviteCode
     updateCode(inviteCodeInput: InviteCodeInput): InviteCode
+    removeUser(uid: String!): User
+    createUser(userInput: UserInput): User
+    updateUser(userInput: UserInput): User
 }
 
 schema {
