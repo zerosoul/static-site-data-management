@@ -1,5 +1,5 @@
 node_modules
 .vscode
 .DS_Store
-nodemon.json
-nodemon.dev.json
+ecosystem.config.js
+package-lock.json

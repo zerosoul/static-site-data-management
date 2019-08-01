@@ -33,17 +33,12 @@ app.use(
 );
 let db_conn_str = "";
 let account = {};
-if (process.env.NODE_ENV === "production") {
-  db_conn_str = `mongodb://${process.env.MONGO_HOST}:${
-    process.env.MONGO_PORT
-  }/${process.env.MONGO_DB}`;
-} else {
-  db_conn_str = `mongodb://${process.env.MONGO_HOST}:${
-    process.env.MONGO_PORT
-  }/${process.env.MONGO_DB}?authSource=admin`;
-  account.user = process.env.MONGO_USER;
-  account.pass = process.env.MONGO_PASSWORD;
-}
+db_conn_str = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${
+  process.env.MONGO_DB
+}?authSource=admin`;
+// 兼容没账号密码情况
+process.env.MONGO_USER && (account.user = process.env.MONGO_USER);
+process.env.MONGO_USER && (account.pass = process.env.MONGO_PASSWORD);
 
 console.info("conn str", db_conn_str);
 mongoose
