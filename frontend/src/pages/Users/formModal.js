@@ -15,20 +15,20 @@ import {
 import { InsertUser, UpdateUser, GetUser, ListQuery } from "./actions.gql";
 const ColLayout = {
   labelCol: {
-    span: 4
+    span: 7
   },
   wrapperCol: {
-    span: 20
+    span: 17
   }
 };
-const ThinColLayout = {
-  labelCol: {
-    span: 8
-  },
-  wrapperCol: {
-    span: 16
-  }
-};
+// const ThinColLayout = {
+//   labelCol: {
+//     span: 16
+//   },
+//   wrapperCol: {
+//     span: 12
+//   }
+// };
 
 const { Item } = Form;
 const { Option } = Select;
@@ -139,8 +139,8 @@ const EditForm = ({
             </Row>
 
             <Row>
-              <Col span={6}>
-                <Item label="角色" {...ThinColLayout}>
+              <Col span={12}>
+                <Item label="角色" {...ColLayout}>
                   {getFieldDecorator("role", {
                     rules: [],
                     initialValue: String(user.role || 2)
