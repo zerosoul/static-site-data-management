@@ -8,6 +8,8 @@ module.exports = {
       ignore_watch: ["frontend/*"],
       env: {
         NODE_ENV: "development",
+        JWT_TOKEN: "SOME_SUPER_SECRET_RANDOM_STRING",
+        // mongodb setting
         MONGO_USER: "username",
         MONGO_PASSWORD: "password",
         MONGO_DB: "db_name",
@@ -16,6 +18,8 @@ module.exports = {
       },
       env_production: {
         NODE_ENV: "production",
+        JWT_TOKEN: "SOME_SUPER_SECRET_RANDOM_STRING",
+        // mongodb setting
         MONGO_USER: "username",
         MONGO_PASSWORD: "password",
         MONGO_DB: "db_name",
