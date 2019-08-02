@@ -26,14 +26,18 @@ module.exports = {
     }
   },
   login: async ({ email, password }) => {
+    const errResp = {
+      userId: 0,
+      errMsg: "用户名或密码不正确"
+    };
     try {
       const user = await User.findOne({ email: email });
       if (!user) {
-        throw new Error("用户名或密码不正确");
+        return errResp;
       }
       const isEqual = await bcrypt.compare(password, user.password);
       if (!isEqual) {
-        throw new Error("用户名或密码不正确");
+        return errResp;
       }
       const token = jwt.sign(
         { userId: user.id, email: user.email },

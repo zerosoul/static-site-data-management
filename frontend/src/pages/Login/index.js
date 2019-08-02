@@ -34,7 +34,6 @@ const StyledForm = styled.section`
 const login = isLogin();
 const LoginPage = ({ form, location: { state = {} }, history }) => {
   console.log("state", state);
-  const [errMsg, setErrMsg] = useState("");
   const [isLogin, setIsLogin] = useState(login);
 
   const { from = "/" } = state;
@@ -49,11 +48,6 @@ const LoginPage = ({ form, location: { state = {} }, history }) => {
       }
     });
   };
-  useEffect(() => {
-    if (errMsg) {
-      message.warning(errMsg);
-    }
-  }, [errMsg]);
 
   const { getFieldDecorator } = form;
   return isLogin ? (
@@ -67,16 +61,20 @@ const LoginPage = ({ form, location: { state = {} }, history }) => {
       {(Login, { loading, data, error }) => {
         if (error) {
           console.log("error", error);
-
-          setErrMsg(error.message);
+          message.warning(error.message);
         }
-        if (data) {
-          console.log("login data", data);
-          const resp = data.login || {};
-          setLogin(resp);
 
-          history.push(from);
-          location.reload();
+        if (data) {
+          console.log("login data222", data.login);
+
+          const resp = data.login || {};
+          if (resp.errMsg) {
+            message.warning(resp.errMsg);
+          } else {
+            setLogin(resp);
+            history.push(from);
+            location.reload();
+          }
         }
         return (
           <StyledForm>

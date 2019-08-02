@@ -116,7 +116,7 @@ class App extends Component {
             margin: "24px 50px",
             padding: "20px",
             background: "#fff",
-            minHeight: "80vh"
+            minHeight: "82vh"
           }}
         >
           <Suspense fallback={<Skeleton active />}>

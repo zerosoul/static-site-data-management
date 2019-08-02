@@ -9,5 +9,6 @@ mutation Login($email: String!, $password: String!) {
     }
     token
     tokenExpiration
+    errMsg
   }
 }

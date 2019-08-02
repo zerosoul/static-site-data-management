@@ -90,9 +90,10 @@ type UserInfoMeta{
 type AuthData {
   userId: ID!
   meta: UserInfoMeta
-  role: Int!
-  token: String!
-  tokenExpiration: Int!
+  role: Int
+  token: String
+  tokenExpiration: Int
+  errMsg:String
 }
 type DDArticleResult{
   list:[DDArticle]
