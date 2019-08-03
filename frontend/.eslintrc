@@ -4,6 +4,7 @@
   "env": {
     "node": true,
     "es6": true,
+
     "browser": true
   },
   "rules": {
@@ -22,5 +23,10 @@
     "indent": "off",
     "no-trailing-spaces": "off",
     "max-lines": ["warn", { "max": 400 }]
+  },
+  "settings": {
+    "react": {
+      "version": "16.8.6"
+    }
   }
 }

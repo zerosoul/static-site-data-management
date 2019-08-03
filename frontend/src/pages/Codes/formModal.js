@@ -68,7 +68,7 @@ const EditForm = ({ form, handleModalVisible, id = null, code }) => {
   return (
     <Mutation
       mutation={codeId ? UpdateCode : InsertCode}
-      refetchQueries={result => [{ query: ListQuery }]}
+      refetchQueries={() => [{ query: ListQuery }]}
       fetchPolicy="no-cache"
     >
       {(editCode, { loading, data, error }) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Button, Form, Input, message } from "antd";
 import { Mutation } from "react-apollo";

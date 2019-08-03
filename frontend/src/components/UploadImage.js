@@ -1,64 +1,39 @@
-import { Button, Upload, Icon, message } from "antd";
-import React, { useState, useEffect, forwardRef } from "react";
-import styled from "styled-components";
+import { Upload, Icon, message } from "antd";
+import React, { useState, forwardRef } from "react";
 import { compressImage, uploadImage } from "../utils";
 
-const UploadBlock = styled.div`
-  padding: 15px 20px;
-  border: 1px dashed #ddd;
-  cursor: pointer;
-  text-align: center;
-  &:hover {
-    border-color: #007abc;
-  }
-`;
-const UploadImageBlock = styled.div`
-  position: relative;
-  max-width: 150px;
-  cursor: pointer;
-  > img {
-    width: 100%;
-  }
-  .loading {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #666;
-  }
-`;
-
 const UploadImage = (props, ref) => {
-  const { imgUrl, setImgUrl, ...rest } = props;
+  const { imgUrl, setImgUrl } = props;
   console.log("upload props", props, ref);
 
   const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState(null);
+  const [erroring, setErroring] = useState(false);
   const [fileList, setFileList] = useState([]);
   const beforeUpload = file => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      setUploadError("You can only upload JPG/PNG file!");
+    console.log("file type", file.type);
+
+    const isAllowedType =
+      file.type === "image/jpeg" || file.type === "image/png";
+    const size = 5;
+    if (!isAllowedType) {
+      message.warning("图片类型不允许", () => {
+        setErroring(false);
+      });
     }
-    const isLt5M = file.size / 1024 / 1024 < 5;
-    if (!isLt5M) {
-      setUploadError("Image must smaller than 5MB!");
+    const isLtSize = file.size / 1024 / 1024 < size;
+    if (!isLtSize) {
+      message.warning(`图片大小请小于 ${size}MB!`, () => {
+        setErroring(false);
+      });
     }
-    return false;
+    setErroring(!(isAllowedType && isLtSize));
+    return true;
   };
   const handleChange = async info => {
-    if (uploading) {
+    if (uploading || erroring) {
       return;
     }
-    if (uploadError) {
-      message.error(uploadError);
-      return;
-    }
+
     console.log("info", info.fileList);
     // 取最新的
     const [file] = info.fileList.slice(-1);
@@ -74,8 +49,6 @@ const UploadImage = (props, ref) => {
       console.log("image url ", imageUrl);
 
       setImgUrl(imageUrl);
-
-      setUploadError(null);
     }
     setFileList(info.fileList);
   };

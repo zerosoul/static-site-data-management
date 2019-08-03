@@ -36,7 +36,7 @@ export default function List({ handleModalVisible }) {
       key: "options",
       width: 240,
       render: (d, item) => {
-        const { _id, isTop } = item;
+        const { _id } = item;
         return (
           <Button.Group size="small">
             <Button

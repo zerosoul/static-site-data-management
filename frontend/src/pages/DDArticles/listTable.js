@@ -97,7 +97,7 @@ export default function List({
             </Button>
             <Mutation
               mutation={RemoveDdArticle}
-              refetchQueries={result => {
+              refetchQueries={() => {
                 return [{ query: ListQuery }];
               }}
             >
@@ -113,7 +113,7 @@ export default function List({
                     okText="确定"
                     cancelText="取消"
                     onConfirm={async () => {
-                      const resp = await removeDdArticle({
+                      await removeDdArticle({
                         variables: { artId: _id }
                       });
                     }}
@@ -142,7 +142,7 @@ export default function List({
                     okText="确定"
                     cancelText="取消"
                     onConfirm={async () => {
-                      const resp = await updateDdArticle({
+                      await updateDdArticle({
                         variables: { id: _id, isTop: !isTop }
                       });
                     }}

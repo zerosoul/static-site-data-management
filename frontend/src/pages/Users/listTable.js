@@ -1,6 +1,6 @@
 import React from "react";
 import { Query, Mutation } from "react-apollo";
-import { Table, Button, message, Popconfirm, Tag, Badge, Icon } from "antd";
+import { Table, Button, message, Popconfirm, Tag, Badge } from "antd";
 import moment from "moment";
 import styled from "styled-components";
 import { ListQuery, RemoveUser, UpdateUser } from "./actions.gql";
@@ -11,22 +11,6 @@ const VerticalCell = styled.div`
   align-items: flex-start;
   > span {
     margin-top: 0.4rem;
-  }
-`;
-const Thumbnail = styled.a`
-  position: relative;
-  display: inline-block;
-  .linkIco {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: rgba(55, 57, 58, 0.8);
-    padding: 0.2rem;
-  }
-  > img {
-    max-width: 8rem;
-    display: inline-block;
-    vertical-align: middle;
   }
 `;
 export default function List({
@@ -89,7 +73,7 @@ export default function List({
             </Button>
             <Mutation
               mutation={RemoveUser}
-              refetchQueries={result => {
+              refetchQueries={() => {
                 return [{ query: ListQuery }];
               }}
             >
@@ -105,7 +89,7 @@ export default function List({
                     okText="确定"
                     cancelText="取消"
                     onConfirm={async () => {
-                      const resp = await removeUser({
+                      await removeUser({
                         variables: { uid: _id }
                       });
                     }}
@@ -134,7 +118,7 @@ export default function List({
                     okText="确定"
                     cancelText="取消"
                     onConfirm={async () => {
-                      const resp = await updateUser({
+                      await updateUser({
                         variables: { id: _id, isTop: !isTop }
                       });
                     }}

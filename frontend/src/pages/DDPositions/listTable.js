@@ -82,7 +82,7 @@ export default function List({ handleModalVisible }) {
             </Button>
             <Mutation
               mutation={RemoveDdPosition}
-              refetchQueries={result => {
+              refetchQueries={() => {
                 return [{ query: ListQuery }];
               }}
             >

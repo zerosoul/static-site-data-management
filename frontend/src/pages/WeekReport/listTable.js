@@ -82,7 +82,7 @@ const List = ({ handleModalVisible }) => {
             </Button>
             <Mutation
               mutation={RemoveDdPosition}
-              refetchQueries={result => {
+              refetchQueries={() => {
                 return [{ query: ListQuery }];
               }}
             >
@@ -98,7 +98,7 @@ const List = ({ handleModalVisible }) => {
                     okText="确定"
                     cancelText="取消"
                     onConfirm={async () => {
-                      const resp = await removeDdPosition({
+                      await removeDdPosition({
                         variables: { posId: _id }
                       });
                     }}
