@@ -85,10 +85,10 @@ const UploadImage = (props, ref) => {
     setUploading(false);
   };
   const uploadButton = (
-    <UploadBlock>
+    <div>
       <Icon type={uploading ? "loading" : "plus"} />
       <div className="ant-upload-text">上传</div>
-    </UploadBlock>
+    </div>
   );
   console.log("curr image:", imgUrl);
 
@@ -96,7 +96,7 @@ const UploadImage = (props, ref) => {
     <Upload
       ref={ref}
       accept="image/jpg,image/png,image/gif"
-      listType="picture"
+      listType="picture-card"
       className="avatar-uploader"
       showUploadList={false}
       action={handleChange}
@@ -105,10 +105,12 @@ const UploadImage = (props, ref) => {
       fileList={fileList}
     >
       {imgUrl ? (
-        <UploadImageBlock>
-          <img onLoad={handleImageLoad} src={imgUrl} alt="image uploaded" />
-          {uploading && <div className="loading">loading</div>}
-        </UploadImageBlock>
+        <img
+          onLoad={handleImageLoad}
+          style={{ width: "100%" }}
+          src={imgUrl}
+          alt="image uploaded"
+        />
       ) : (
         uploadButton
       )}

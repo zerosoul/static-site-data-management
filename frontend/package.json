@@ -6,7 +6,7 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
-    "antd": "^3.20.6",
+    "antd": "^3.20.7",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-link-context": "^1.0.18",
