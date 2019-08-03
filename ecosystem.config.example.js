@@ -26,7 +26,7 @@ module.exports = {
         MONGO_HOST: "121.196.22.22",
         MONGO_PORT: 23333
       },
-      exec_mode: "fork_mode"
+      exec_mode: "cluster"
     }
   ]
 };
