@@ -1,12 +1,13 @@
 # 后台数据管理系统
 
 无他，又一套 CRUD（增删改查）后台数据管理系统，只不过用到的技术栈比较新（目前我所理解的最佳实践），具有一定的参考意义。
+
 技术关键词：
 
 - [GraphQL](https://graphql.org/)
 - MongoDB/[mongoose](https://mongoosejs.com/docs/index.html)/mongoose-paginate-v2
 - [Express](http://expressjs.com/)/express-graphql
-- [apollo-client](https://www.apollographql.com/docs/react/)
+- [apollo-client](https://www.apollographql.com/docs/react/)/react-apollo
 - [react](https://reactjs.org)/[react-router](https://reacttraining.com/react-router/web/guides/philosophy)
 - [antd](https://ant.design)
 - [styled-components](https://styled-components.com)/styled-reset
@@ -31,7 +32,7 @@
 
 ### 前端配置文件
 
-在`frontend`目录，拷贝一份`.env.example`并重命名为`.env`
+在`frontend`目录，拷贝一份`.env.example`并重命名为`.env`，用于初始化一些环境变量。
 
 ## 安装前端和后端用到的包
 
@@ -42,10 +43,8 @@ yarn init:packages
 ## 本地开发
 
 ```sh
-# 前后端启动
+# 前后端一起启动
 yarn start
-# 只启动后台接口
-yarn start:bankend
 ```
 
 ## 部署接口
