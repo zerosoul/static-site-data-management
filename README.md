@@ -1,8 +1,23 @@
 # 后台数据管理系统
 
+演示地址：[https://ssde.yangerxiao.com](https://ssde.yangerxiao.com)
+演示账号：demo/123123
+
+## UI 截图
+
+![登录页面](demo.login.png)
+![文章列表页面](demo.arts.png)
+![文章编辑](demo.art.update.png)
+![职位列表页面](demo.position.png)
+
 无他，又一套 CRUD（增删改查）后台数据管理系统，只不过用到的技术栈比较新（目前我所理解的最佳实践），具有一定的参考意义。
 
-技术关键词：
+## 对应的官网展现
+
+[文章列表页](http://web.1d1d100.com/1d1d/pc/news/)
+[职位列表页](http://web.1d1d100.com/1d1d/pc/hire/)
+
+## 技术关键词
 
 - [GraphQL](https://graphql.org/)
 - MongoDB/[mongoose](https://mongoosejs.com/docs/index.html)/mongoose-paginate-v2
