@@ -1,9 +1,9 @@
 import React from "react";
 import { Query, Mutation } from "react-apollo";
-import { Table, Button, message, Popconfirm, Tag, Badge } from "antd";
+import { Table, Button, message, Popconfirm, Tag } from "antd";
 import moment from "moment";
 import styled from "styled-components";
-import { ListQuery, RemoveUser, UpdateUser } from "./actions.gql";
+import { ListQuery, RemoveUser } from "./actions.gql";
 
 const VerticalCell = styled.div`
   display: flex;
@@ -59,7 +59,7 @@ export default function List({
       key: "options",
       width: 240,
       render: (d, item) => {
-        const { _id, isTop } = item;
+        const { _id } = item;
         return (
           <Button.Group size="small">
             <Button
@@ -97,43 +97,6 @@ export default function List({
                   >
                     <Button loading={loading} type="danger">
                       删除
-                    </Button>
-                  </Popconfirm>
-                );
-              }}
-            </Mutation>
-            <Mutation
-              mutation={UpdateUser}
-              refetchQueries={[{ query: ListQuery, variables: retriveValues }]}
-            >
-              {(updateUser, { data, loading, err }) => {
-                if (err) {
-                  message.error("操作出错了");
-                }
-                if (data && data.title) {
-                  message.success("操作成功");
-                }
-                return (
-                  <Popconfirm
-                    okText="确定"
-                    cancelText="取消"
-                    onConfirm={async () => {
-                      await updateUser({
-                        variables: { id: _id, isTop: !isTop }
-                      });
-                    }}
-                    title={isTop ? "确定撤顶？" : "确定置顶？"}
-                  >
-                    <Button loading={loading}>
-                      {isTop ? "撤顶" : "置顶"}
-                      {isTop && (
-                        <Badge
-                          style={{ marginLeft: "8px" }}
-                          color="#f50"
-                          status="processing"
-                          dot={true}
-                        />
-                      )}
                     </Button>
                   </Popconfirm>
                 );

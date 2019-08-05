@@ -70,7 +70,7 @@ type User {
   mobile: String
   password: String
   role: Int
-  createdAt: String!
+  createdAt: String
 }
 
 input UserInput {
