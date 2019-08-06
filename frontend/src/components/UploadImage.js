@@ -8,7 +8,6 @@ const UploadImage = (props, ref) => {
 
   const [uploading, setUploading] = useState(false);
   const [erroring, setErroring] = useState(false);
-  const [fileList, setFileList] = useState([]);
   const beforeUpload = file => {
     console.log("file type", file.type);
 
@@ -34,9 +33,9 @@ const UploadImage = (props, ref) => {
       return;
     }
 
-    console.log("info", info.fileList);
+    console.log("info", info.file);
     // 取最新的
-    const [file] = info.fileList.slice(-1);
+    const file = info.file;
     console.log("file info", file);
     // return;
     setUploading(true);
@@ -50,7 +49,6 @@ const UploadImage = (props, ref) => {
 
       setImgUrl(imageUrl);
     }
-    setFileList(info.fileList);
   };
   const handleImageLoad = ({ target }) => {
     console.log("image wtf", target);
@@ -72,10 +70,8 @@ const UploadImage = (props, ref) => {
       listType="picture-card"
       className="avatar-uploader"
       showUploadList={false}
-      action={handleChange}
       beforeUpload={beforeUpload}
       onChange={handleChange}
-      fileList={fileList}
     >
       {imgUrl ? (
         <img
