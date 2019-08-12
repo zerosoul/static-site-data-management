@@ -6,7 +6,6 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
 const InlineChunkHtmlPlugin = require("react-dev-utils/InlineChunkHtmlPlugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -439,10 +438,6 @@ module.exports = function(webpackEnv) {
       new webpack.DefinePlugin(env.stringified),
       // This is necessary to emit hot updates (currently CSS only):
       isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
-      // Watcher doesn't work well if you mistype casing in a path so we use
-      // a plugin that prints an error when you attempt to do this.
-      // See https://github.com/facebook/create-react-app/issues/240
-      isEnvDevelopment && new CaseSensitivePathsPlugin(),
       // If you require a missing module and then `npm install` it, you still have
       // to restart the development server for Webpack to discover it. This plugin
       // makes the discovery automatic so you don't have to restart.
