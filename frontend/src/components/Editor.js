@@ -32,7 +32,7 @@ const Editor = ({ onChange, value = "" }, ref) => {
         console.log("image", files);
         const compressedFile = await compressImage(files[0], {
           maxSizeMB: 2,
-          maxWidthOrHeight: 600
+          maxWidthOrHeight: 800
         });
         const imgUrl = await uploadImage(compressedFile);
 

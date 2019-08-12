@@ -7,9 +7,10 @@ export const compressImage = async (image, opts = {}) => {
     return image;
   }
   let options = {
-    maxSizeMB: 0.5,
+    maxSizeMB: 0.8,
     maxWidthOrHeight: 300,
     useWebWorker: true,
+    maxIteration: 5,
     ...opts
   };
   try {
@@ -46,6 +47,7 @@ export function uploadImage(img) {
       .toString(36)
       .substring(4)}`
   );
+  formData.append("compress", false);
   return new Promise((resolve, reject) => {
     fetch(`${UploadAPI}`, {
       method: "POST",
